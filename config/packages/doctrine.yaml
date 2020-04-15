@@ -1,0 +1,9 @@
+doctrine:
+  orm:
+    mappings:
+      AcMarche\Api:
+        is_bundle: false
+        type: annotation
+        dir: '%kernel.project_dir%/src/AcMarche/Api/src/Entity'
+        prefix: 'AcMarche\Api'
+        alias: AcMarche\Api

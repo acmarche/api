@@ -1,0 +1,11 @@
+<h3><a href="http://www.dansnospensees.be/fr">{{ title }}</a></h3><br/>
+<table class="table table-bordered table-hover">
+    {% for mort in items |slice(0,20)  %}
+        <tr>
+            <td>
+                <a href="{{ mort.link }}">{{ mort.title }}</a>
+                <br/>{{ mort.description|raw }}
+            </td>
+        </tr>
+    {% endfor %}
+</table>
