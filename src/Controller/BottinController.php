@@ -5,6 +5,7 @@ namespace AcMarche\Api\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -90,18 +91,26 @@ class BottinController extends AbstractController
     public function search(Request $request): JsonResponse
     {
         $keyword = $request->request->all();
-        $url = $this->baseUrl.'/bottin/search/'.$slug;
+        $url = $this->baseUrl.'/bottin/search';
+        $request = $this->httpClient->request(
+            "POST",
+            $url,
+            [
+                'body' => $keyword,
+            ]
+        );
 
-        return $this->json($this->execute($url));
+        return new JsonResponse($request->getContent());
     }
 
     /**
      *
-     * @Route("/updatefiche", name="bottin_api_update_fiche", methods={"POST"}, format="json")
+     * @Route("/admin/updatefiche", name="bottin_api_update_fiche", methods={"POST"}, format="json")
      */
-    public function updatefiche(): JsonResponse
+    public function updatefiche(Request $request): JsonResponse
     {
-        $url = $this->baseUrl.'/fiche/'.$id;
+        $fields = $request->request->all();
+        $url = $this->baseUrl.'/updatefiche';
         $request = $this->httpClient->request(
             "POST",
             $url,
@@ -110,12 +119,7 @@ class BottinController extends AbstractController
             ]
         );
 
-        $content = json_decode($request->getContent());
-        if (!$content) {
-            return $this->json(['error' => 1, 'message' => 'Erreur']);
-        }
-
-        return $this->json($this->execute($url));
+        return new JsonResponse($request->getContent());
     }
 
     private function execute(string $url): array
