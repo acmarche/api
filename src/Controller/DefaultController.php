@@ -45,6 +45,7 @@ class DefaultController extends AbstractController
             $data[$i]['id'] = $rue->getId();
             $data[$i]['code'] = $rue->getCode();
             $data[$i]['nom'] = $rue->getNom();
+            $data[$i]['localite'] = $rue->getLocalite();
             $i++;
         }
 

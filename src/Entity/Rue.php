@@ -26,6 +26,11 @@ class Rue
      */
     private $nom;
 
+    /**
+     * @ORM\Column(type="string", length=200)
+     */
+    private $localite;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -54,4 +59,15 @@ class Rue
 
         return $this;
     }
+
+    public function getLocalite():?string
+    {
+        return $this->localite;
+    }
+
+    public function setLocalite(string $localite): self
+    {
+        $this->localite = $localite;
+    }
+
 }

@@ -3,8 +3,6 @@
 namespace AcMarche\Api\Controller;
 
 use AcMarche\Api\Necrologie\Necrologie;
-use Psr\Cache\CacheItemPoolInterface;
-use SoapClient;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
