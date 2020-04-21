@@ -28,8 +28,22 @@
             <li><a href="{{ path('rues') }}">Rues</a></li>
         </ul>
 
-        <ul>
-            <li></li>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <a href="{{ path('bottin_api_fiches') }}">Fiches</a>
+            </li>
+            <li class="list-group-item">
+                <a href="{{ path('bottin_api_commerces') }}"> Commerces</a>
+            </li>
+            <li class="list-group-item">
+                <a href="{{ path('bottin_api_fiche_by_category',{'id': 512}) }}">Fiches by category</a>
+            </li>
+            <li class="list-group-item">
+                <a href="{{ path('bottin_api_fiche_id',{'id': 334}) }}">Fiche by id</a>
+            </li>
+            <li class="list-group-item">
+                <a href="{{ path('bottin_api_fiche_slug',{'slug': 'bureau-memo'}) }}">Fiche by slug</a>
+            </li>
         </ul>
     </div>
 {% endblock %}

@@ -24,11 +24,12 @@ class BottinController extends AbstractController
     /**
      * @var string
      */
-    private $baseUrl = "https://bottin.marche.be/api/";
+    private $baseUrl;
 
-    public function __construct(HttpClientInterface $httpClient)
+    public function __construct(HttpClientInterface $httpClient, string $baseUrl)
     {
         $this->httpClient = $httpClient;
+        $this->baseUrl = $baseUrl;
     }
 
     /**
@@ -36,7 +37,7 @@ class BottinController extends AbstractController
      */
     public function fiches(): JsonResponse
     {
-        $url = $this->baseUrl.'/fiches';
+        $url = $this->baseUrl.'/bottin/fiches';
 
         return $this->json($this->execute($url));
     }
@@ -46,7 +47,7 @@ class BottinController extends AbstractController
      */
     public function commerces(): JsonResponse
     {
-        $url = $this->baseUrl.'/commerces/';
+        $url = $this->baseUrl.'/bottin/commerces/';
 
         return $this->json($this->execute($url));
     }
@@ -56,17 +57,17 @@ class BottinController extends AbstractController
      */
     public function ficheByCategory($id): JsonResponse
     {
-        $url = $this->baseUrl.'/fiches/category/'.$id;
+        $url = $this->baseUrl.'/bottin/fiches/category/'.$id;
 
         return $this->json($this->execute($url));
     }
 
     /**
-     * @Route("/bottin/fiche/{id}", name="bottin_api_fiche_by_id", methods={"GET"}, format="json")
+     * @Route("/bottin/fiche/{id}", name="bottin_api_fiche_id", methods={"GET"}, format="json")
      */
     public function ficheById(int $id): JsonResponse
     {
-        $url = $this->baseUrl.'/fiche/'.$id;
+        $url = $this->baseUrl.'/bottin/fichebyid/'.$id;
 
         return $this->json($this->execute($url));
     }
@@ -74,9 +75,9 @@ class BottinController extends AbstractController
     /**
      * @Route("/bottin/fichebyslugname/{slug}", name="bottin_api_fiche_slug", methods={"GET"}, format="json")
      */
-    public function ficheSlug($slug): JsonResponse
+    public function ficheSlug(string $slug): JsonResponse
     {
-        $url = $this->baseUrl.'/fiche/'.$slug;
+        $url = $this->baseUrl.'/bottin/fichebyslugname/'.$slug;
 
         return $this->json($this->execute($url));
     }
@@ -89,7 +90,7 @@ class BottinController extends AbstractController
     public function search(Request $request): JsonResponse
     {
         $keyword = $request->request->all();
-        $url = $this->baseUrl.'/fiche/'.$slug;
+        $url = $this->baseUrl.'/bottin/search/'.$slug;
 
         return $this->json($this->execute($url));
     }
@@ -120,7 +121,7 @@ class BottinController extends AbstractController
     private function execute(string $url): array
     {
         $request = $this->httpClient->request("GET", $url);
-        $content = json_decode($request->getContent());
+        $content = json_decode($request->getContent(), true);
         if (!$content) {
             return ['error' => 1, 'message' => 'Erreur'];
         }
