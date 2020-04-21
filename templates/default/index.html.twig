@@ -1,14 +1,35 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <style>
+        .example-wrapper {
+            margin: 1em auto;
+            max-width: 800px;
+            width: 95%;
+            font: 18px/1.5 sans-serif;
+        }
 
-<div class="example-wrapper">
-    <h1>Hello ✅</h1>
+        .example-wrapper code {
+            background: #F5F5F5;
+            padding: 2px 6px;
+        }
+    </style>
 
+    <div class="example-wrapper">
+        <h1>Hello ✅</h1>
 
-</div>
+        <ul>
+            <li><a href="{{ path('actualite') }}">Actualités</a></li>
+            <li>
+                <a href="{{ path('acmarche_api_marchebe_getnecrologie', {'fullpage': '0'}) }}">Nécrologie</a> /
+                <a href="{{ path('acmarche_api_marchebe_getnecrologie', {'fullpage': '1'}) }}">Nécrologie full</a>
+            </li>
+            <li><a href="{{ path('events') }}">Events</a></li>
+            <li><a href="{{ path('rues') }}">Rues</a></li>
+        </ul>
+
+        <ul>
+            <li></li>
+        </ul>
+    </div>
 {% endblock %}
