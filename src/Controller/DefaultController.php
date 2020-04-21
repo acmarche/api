@@ -20,7 +20,7 @@ class DefaultController extends AbstractController
     }
 
     /**
-     * @Route("/", name="default")
+     * @Route("/", name="default", name="api_home")
      */
     public function index()
     {

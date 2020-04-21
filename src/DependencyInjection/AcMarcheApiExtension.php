@@ -20,7 +20,7 @@ class AcMarcheApiExtension extends Extension implements PrependExtensionInterfac
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../../config'));
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../../config'));
         $loader->load('services.yaml');
     }
 
@@ -45,7 +45,7 @@ class AcMarcheApiExtension extends Extension implements PrependExtensionInterfac
                         $this->loadConfig($container, 'liip_imagine');
                         break;
                     case 'framework':
-                        // $this->loadConfig($container, 'security');
+                        $this->loadConfig($container, 'security');
                         break;
                 }
             }
@@ -56,7 +56,7 @@ class AcMarcheApiExtension extends Extension implements PrependExtensionInterfac
     {
         $configs = $this->loadYamlFile($container);
 
-        $configs->load($name . '.yaml');
+        $configs->load($name.'.yaml');
     }
 
     /**
@@ -67,7 +67,7 @@ class AcMarcheApiExtension extends Extension implements PrependExtensionInterfac
     {
         return new Loader\YamlFileLoader(
             $container,
-            new FileLocator(__DIR__ . '/../../config/packages/')
+            new FileLocator(__DIR__.'/../../config/packages/')
         );
     }
 }
