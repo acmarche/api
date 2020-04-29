@@ -92,8 +92,10 @@ class BottinController extends AbstractController
     {
         $content = json_decode($request->getContent(), true);
         $query = $content['query'];
-        $match = $query['match_phrase'];
-        $keyword = $match['societe'];
+        $bool = $query['bool'];
+        $should = $bool['should'];
+        $societe = $should['0']['match']['societe_autocomplete'];
+        $keyword = preg_replace("#'#","",$societe);
 
         $url = $this->baseUrl.'/bottin/search';
         $request = $this->httpClient->request(

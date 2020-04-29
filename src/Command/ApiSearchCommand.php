@@ -36,30 +36,35 @@ class ApiSearchCommand extends Command
         return 0;
     }
 
-    protected function searchOld(string $keyword)
+    protected function searchOld(string $clef)
     {
-        $size = 10;
-        $select = array('societe', 'telephone', 'classements');
-        $sort = array(
-            'societe' =>
+        $size = 30;
+        $select = array('societe', 'telephone', 'secteurs', 'slugname', 'localite');
+        //todo retirer sort et trouver comment demander que le type fiche
+        $sort = array();
+        $query = array('bool' =>
+            array("should"=>
                 array(
-                    'order' => 'desc',
-                ),
+                    array("match"=> array("societe_autocomplete"=>$clef)),
+                    array("match"=> array("classements.name_autocomplete"=>$clef)),
+                    array("match"=> array("rubrique_name_autocomplete"=>$clef)),
+                    array("match"=> array("rue_autocomplete"=>$clef))
+                )
+            )
         );
-        $query = array('match_phrase' => array('societe' => $keyword));
 
         $default = array(
             'query' => $query,
             'size' => $size,
             'sort' => $sort,
             '_source' =>
-                $select,
+                $select
         );
 
         $querySring = json_encode($default);
         //$urlCurl = "localhost:9200/bottin/_search";
         $urlCurl = "https://api.marche.be/search/bottin/fiches/_search";
-        //$urlCurl = "http://api.local/search/bottin/fiches/_search";
+       // $urlCurl = "http://api.local/search/bottin/fiches/_search";
         // $urlCurl = "localhost:9200/bottin/fiches/_search";
         $elastic = curl_init($urlCurl);
         curl_setopt($elastic, CURLOPT_CUSTOMREQUEST, "POST");
@@ -82,6 +87,7 @@ class ApiSearchCommand extends Command
         }
         curl_close($elastic);
 
+        var_dump($response);
         return json_decode($response);
     }
 }
