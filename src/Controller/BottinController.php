@@ -7,6 +7,7 @@ use Psr\Log\LoggerAwareTrait;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -91,7 +92,7 @@ class BottinController extends AbstractController implements LoggerAwareInterfac
      * @param Request $request
      * @return JsonResponse
      */
-    public function search(Request $request): JsonResponse
+    public function search(Request $request): Response
     {
         $content = json_decode($request->getContent(), true);
         $query = $content['query'];
@@ -112,7 +113,7 @@ class BottinController extends AbstractController implements LoggerAwareInterfac
         $content = $request->getContent();
         $this->logger->error(json_encode($content), ['api_search']);
 
-        return new JsonResponse($content);
+        return new Response($content);
     }
 
     /**

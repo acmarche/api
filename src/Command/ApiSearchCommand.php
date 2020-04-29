@@ -19,17 +19,23 @@ class ApiSearchCommand extends Command
     {
         $this
             ->setDescription('Add a short description for your command')
-            ->addArgument('arg1', InputArgument::OPTIONAL, 'Argument description')
+            ->addArgument('keyword', InputArgument::REQUIRED, 'keyword')
             ->addOption('option1', null, InputOption::VALUE_NONE, 'Option description');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $arg1 = $input->getArgument('arg1');
+        $keyword = $input->getArgument('keyword');
 
-        $result = $this->searchOld('axa');
-        var_dump($result);
+        $data = json_decode($this->searchOld($keyword), true);
+        $result = $data['hits'];
+        $io->writeln('Trouvé: '.$result['total']['value']);
+
+        foreach ($result['hits'] as $hit) {
+            $source = $hit['_source'];
+            $io->writeln('Trouvé: '.$source['societe'].' cap '.$source['cap']);
+        }
 
         $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
 
@@ -42,15 +48,17 @@ class ApiSearchCommand extends Command
         $select = array('societe', 'telephone', 'secteurs', 'slugname', 'localite');
         //todo retirer sort et trouver comment demander que le type fiche
         $sort = array();
-        $query = array('bool' =>
-            array("should"=>
+        $query = array(
+            'bool' =>
                 array(
-                    array("match"=> array("societe_autocomplete"=>$clef)),
-                    array("match"=> array("classements.name_autocomplete"=>$clef)),
-                    array("match"=> array("rubrique_name_autocomplete"=>$clef)),
-                    array("match"=> array("rue_autocomplete"=>$clef))
-                )
-            )
+                    "should" =>
+                        array(
+                            array("match" => array("societe_autocomplete" => $clef)),
+                            array("match" => array("classements.name_autocomplete" => $clef)),
+                            array("match" => array("rubrique_name_autocomplete" => $clef)),
+                            array("match" => array("rue_autocomplete" => $clef)),
+                        ),
+                ),
         );
 
         $default = array(
@@ -58,13 +66,13 @@ class ApiSearchCommand extends Command
             'size' => $size,
             'sort' => $sort,
             '_source' =>
-                $select
+                $select,
         );
 
         $querySring = json_encode($default);
         //$urlCurl = "localhost:9200/bottin/_search";
         $urlCurl = "https://api.marche.be/search/bottin/fiches/_search";
-       // $urlCurl = "http://api.local/search/bottin/fiches/_search";
+        //  $urlCurl = "http://api.local/search/bottin/fiches/_search";
         // $urlCurl = "localhost:9200/bottin/fiches/_search";
         $elastic = curl_init($urlCurl);
         curl_setopt($elastic, CURLOPT_CUSTOMREQUEST, "POST");
@@ -87,6 +95,6 @@ class ApiSearchCommand extends Command
         }
         curl_close($elastic);
 
-        return json_decode($response);
+        return $response;
     }
 }
