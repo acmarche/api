@@ -28,7 +28,8 @@ class ApiSearchCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $arg1 = $input->getArgument('arg1');
 
-        $this->searchOld('axa');
+        $result = $this->searchOld('axa');
+        var_dump($result);
 
         $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
 
@@ -81,6 +82,6 @@ class ApiSearchCommand extends Command
         }
         curl_close($elastic);
 
-        var_dump($response);
+        return json_decode($response);
     }
 }

@@ -100,7 +100,7 @@ class BottinController extends AbstractController
             "POST",
             $url,
             [
-                'body' => $keyword,
+                'body' => ['keyword' => $keyword],
             ]
         );
 
