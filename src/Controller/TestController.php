@@ -60,7 +60,7 @@ class TestController extends AbstractController
     {
         $data = ['keyword' => 'AXA'];
 
-        $url = $this->baseUrl.'/search';
+        $url = $this->baseUrl.'/bottin/search';
         $request = $this->httpClient->request(
             "POST",
             $url,
