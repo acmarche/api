@@ -87,7 +87,6 @@ class ApiSearchCommand extends Command
         }
         curl_close($elastic);
 
-        var_dump($response);
         return json_decode($response);
     }
 }
