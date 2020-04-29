@@ -61,8 +61,8 @@ class MarcheBeController extends AbstractController
     }
 
     /**
-     * @Route("/necrologie/")
-     * @Route("/necrologie/{fullpage}")
+     * @Route("/necrologie/", name="necrologie")
+     * @Route("/necrologie/{fullpage}", name="necrologie_full")
      * @return string
      * @throws \Psr\Cache\InvalidArgumentException
      */
