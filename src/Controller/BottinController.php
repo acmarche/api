@@ -2,10 +2,11 @@
 
 namespace AcMarche\Api\Controller;
 
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -15,8 +16,10 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
  * @package AcMarche\Api\Controller
  *
  */
-class BottinController extends AbstractController
+class BottinController extends AbstractController implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     /**
      * @var HttpClientInterface
      */
@@ -95,7 +98,7 @@ class BottinController extends AbstractController
         $bool = $query['bool'];
         $should = $bool['should'];
         $societe = $should['0']['match']['societe_autocomplete'];
-        $keyword = preg_replace("#'#","",$societe);
+        $keyword = preg_replace("#'#", "", $societe);
 
         $url = $this->baseUrl.'/bottin/search';
         $request = $this->httpClient->request(
@@ -106,7 +109,10 @@ class BottinController extends AbstractController
             ]
         );
 
-        return new JsonResponse($request->getContent());
+        $content = $request->getContent();
+        $this->logger->warning(json_encode($content), ['api_search']);
+
+        return new JsonResponse($content);
     }
 
     /**
