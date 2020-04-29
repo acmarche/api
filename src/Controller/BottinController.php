@@ -90,7 +90,11 @@ class BottinController extends AbstractController
      */
     public function search(Request $request): JsonResponse
     {
-        $keyword = $request->request->all();
+        $content = json_decode($request->getContent(), true);
+        $query = $content['query'];
+        $match = $query['match_phrase'];
+        $keyword = $match['societe'];
+
         $url = $this->baseUrl.'/bottin/search';
         $request = $this->httpClient->request(
             "POST",
