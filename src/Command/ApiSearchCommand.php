@@ -59,7 +59,7 @@ class ApiSearchCommand extends Command
         $querySring = json_encode($default);
         //$urlCurl = "localhost:9200/bottin/_search";
         $urlCurl = "https://api.marche.be/search/bottin/fiches/_search";
-        $urlCurl = "http://api.local/search/bottin/fiches/_search";
+        //$urlCurl = "http://api.local/search/bottin/fiches/_search";
         // $urlCurl = "localhost:9200/bottin/fiches/_search";
         $elastic = curl_init($urlCurl);
         curl_setopt($elastic, CURLOPT_CUSTOMREQUEST, "POST");
