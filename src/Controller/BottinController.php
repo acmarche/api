@@ -111,7 +111,8 @@ class BottinController extends AbstractController implements LoggerAwareInterfac
         );
 
         $content = $request->getContent();
-        $this->logger->error(json_encode($content), ['api_search']);
+        //$this->logger->error(json_encode($content), ['api_search']);
+        $this->logger->error($keyword, ['api_search']);
 
         return new Response($content);
     }
