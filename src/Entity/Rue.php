@@ -2,6 +2,7 @@
 
 namespace AcMarche\Api\Entity;
 
+use AcMarche\Api\Entity\Traits\IdTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -9,12 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Rue
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    use IdTrait;
 
     /**
      * @ORM\Column(type="string", length=100)
@@ -30,11 +26,6 @@ class Rue
      * @ORM\Column(type="string", length=200)
      */
     private $localite;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getCode(): ?string
     {
@@ -60,7 +51,7 @@ class Rue
         return $this;
     }
 
-    public function getLocalite():?string
+    public function getLocalite(): ?string
     {
         return $this->localite;
     }

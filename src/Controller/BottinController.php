@@ -2,6 +2,7 @@
 
 namespace AcMarche\Api\Controller;
 
+use AcMarche\Api\Logger\LoggerDb;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -30,11 +31,16 @@ class BottinController extends AbstractController implements LoggerAwareInterfac
      * @var string
      */
     private $baseUrl;
+    /**
+     * @var LoggerDb
+     */
+    private $loggerDb;
 
-    public function __construct(HttpClientInterface $httpClient, string $baseUrl)
+    public function __construct(HttpClientInterface $httpClient, LoggerDb $loggerDb, string $baseUrl)
     {
         $this->httpClient = $httpClient;
         $this->baseUrl = $baseUrl;
+        $this->loggerDb = $loggerDb;
     }
 
     /**
@@ -113,6 +119,7 @@ class BottinController extends AbstractController implements LoggerAwareInterfac
         $content = $request->getContent();
         //$this->logger->error(json_encode($content), ['api_search']);
         $this->logger->error($keyword, ['api_search']);
+        $this->loggerDb->logSearch($keyword);
 
         return new Response($content);
     }
