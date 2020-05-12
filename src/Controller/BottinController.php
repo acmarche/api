@@ -3,13 +3,14 @@
 namespace AcMarche\Api\Controller;
 
 use AcMarche\Api\Logger\LoggerDb;
-use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerAwareTrait;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
@@ -18,15 +19,12 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
  * @package AcMarche\Api\Controller
  *
  */
-class BottinController extends AbstractController implements LoggerAwareInterface
+class BottinController extends AbstractController
 {
-    use LoggerAwareTrait;
-
     /**
      * @var HttpClientInterface
      */
     private $httpClient;
-
     /**
      * @var string
      */
@@ -35,12 +33,21 @@ class BottinController extends AbstractController implements LoggerAwareInterfac
      * @var LoggerDb
      */
     private $loggerDb;
+    /**
+     * @var FilesystemAdapter
+     */
+    private $cache;
 
-    public function __construct(HttpClientInterface $httpClient, LoggerDb $loggerDb, string $baseUrl)
-    {
+    public function __construct(
+        HttpClientInterface $httpClient,
+        CacheInterface $cache,
+        LoggerDb $loggerDb,
+        string $baseUrl
+    ) {
         $this->httpClient = $httpClient;
         $this->baseUrl = $baseUrl;
         $this->loggerDb = $loggerDb;
+        $this->cache = $cache;
     }
 
     /**
@@ -48,9 +55,17 @@ class BottinController extends AbstractController implements LoggerAwareInterfac
      */
     public function fiches(): JsonResponse
     {
-        $url = $this->baseUrl.'/bottin/fiches';
+        $value = $this->cache->get(
+            'allfiches',
+            function (ItemInterface $item) {
+                $item->expiresAfter(18000);
+                $url = $this->baseUrl.'/bottin/fiches';
 
-        return $this->json($this->execute($url));
+                return $this->json($this->execute($url));
+            }
+        );
+
+        return $value;
     }
 
     /**
@@ -58,9 +73,17 @@ class BottinController extends AbstractController implements LoggerAwareInterfac
      */
     public function commerces(): JsonResponse
     {
-        $url = $this->baseUrl.'/bottin/commerces/';
+        $value = $this->cache->get(
+            'commerces',
+            function (ItemInterface $item) {
+                $item->expiresAfter(18000);
+                $url = $this->baseUrl.'/bottin/commerces/';
 
-        return $this->json($this->execute($url));
+                return $this->json($this->execute($url));
+            }
+        );
+
+        return $value;
     }
 
     /**
@@ -68,9 +91,17 @@ class BottinController extends AbstractController implements LoggerAwareInterfac
      */
     public function ficheByCategory($id): JsonResponse
     {
-        $url = $this->baseUrl.'/bottin/fiches/category/'.$id;
+        $value = $this->cache->get(
+            'fichebycategory-'.$id,
+            function (ItemInterface $item) use($id) {
+                $item->expiresAfter(18000);
+                $url = $this->baseUrl.'/bottin/fiches/category/'.$id;
 
-        return $this->json($this->execute($url));
+                return $this->json($this->execute($url));
+            }
+        );
+
+        return $value;
     }
 
     /**
@@ -88,6 +119,7 @@ class BottinController extends AbstractController implements LoggerAwareInterfac
      */
     public function ficheSlug(string $slug): JsonResponse
     {
+        $slug = preg_replace("#.#", "", $slug);
         $url = $this->baseUrl.'/bottin/fichebyslugname/'.$slug;
 
         return $this->json($this->execute($url));
@@ -105,7 +137,7 @@ class BottinController extends AbstractController implements LoggerAwareInterfac
         $bool = $query['bool'];
         $should = $bool['should'];
         $societe = $should['0']['match']['societe_autocomplete'];
-        $keyword = preg_replace("#'#", "", $societe);
+        $keyword = preg_replace("#'#", " ", $societe);
 
         $url = $this->baseUrl.'/bottin/search';
         $request = $this->httpClient->request(
@@ -117,8 +149,6 @@ class BottinController extends AbstractController implements LoggerAwareInterfac
         );
 
         $content = $request->getContent();
-        //$this->logger->error(json_encode($content), ['api_search']);
-        $this->logger->info($keyword, ['api_search']);
         $this->loggerDb->logSearch($keyword);
 
         return new Response($content);
