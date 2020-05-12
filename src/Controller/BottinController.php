@@ -119,7 +119,7 @@ class BottinController extends AbstractController
      */
     public function ficheSlug(string $slug): JsonResponse
     {
-        $slug = preg_replace("#.#", "", $slug);
+        $slug = preg_replace("#\.#", "", $slug);
         $url = $this->baseUrl.'/bottin/fichebyslugname/'.$slug;
 
         return $this->json($this->execute($url));
