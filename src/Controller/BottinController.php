@@ -93,7 +93,7 @@ class BottinController extends AbstractController
     {
         $value = $this->cache->get(
             'fichebycategory-'.$id,
-            function (ItemInterface $item) use($id) {
+            function (ItemInterface $item) use ($id) {
                 $item->expiresAfter(18000);
                 $url = $this->baseUrl.'/bottin/fiches/category/'.$id;
 
@@ -123,6 +123,35 @@ class BottinController extends AbstractController
         $url = $this->baseUrl.'/bottin/fichebyslugname/'.$slug;
 
         return $this->json($this->execute($url));
+    }
+
+    /**
+     * @Route("/bottin/fichebyids", name="bottin_api_fiche_ids", methods={"POST"}, format="json")
+     */
+    public function ficheByIds(Request $request): JsonResponse
+    {
+        $ids = json_decode($request->request->get('ids'), true);
+
+        if (!$ids) {
+            return new JsonResponse(['error' => 1, 'message' => 'Paramète ids obligatoire']);
+        }
+        if (!is_array($ids)) {
+            return new JsonResponse(['error' => 1, 'message' => 'Format json invalide']);
+        }
+        if (count($ids) > 1) {
+            return new JsonResponse(['error' => 1, 'message' => 'Au moins un id est nécessaire']);
+        }
+
+        $url = $this->baseUrl.'/bottin/fichebyids';
+        $request = $this->httpClient->request(
+            "POST",
+            $url,
+            [
+                'body' => ['ids' => $request->request->get('ids')],
+            ]
+        );
+
+        return new JsonResponse($request->getContent());
     }
 
     /**

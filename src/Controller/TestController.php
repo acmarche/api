@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
@@ -30,6 +31,29 @@ class TestController extends AbstractController
     {
         $this->httpClient = $httpClient;
         $this->baseUrl = $baseUrl;
+    }
+
+    /**
+     * @Route("/bottin/test/ids", name="bottin_test_ids")
+     *
+     */
+    public function testIDs(): Response
+    {
+        $ids = json_encode([393, 522, 55]);
+        $fields = ['ids' => $ids];
+
+        $url = $this->baseUrl.'/bottin/fichebyids';
+
+        $request = $this->httpClient->request(
+            "POST",
+            $url,
+            [
+             //   'auth_basic' => ['appandweb', 'DG542poule350'],
+                'body' => $fields,
+            ]
+        );
+
+        return new Response($request->getContent());
     }
 
     /**
