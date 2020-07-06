@@ -151,7 +151,7 @@ class BottinController extends AbstractController
             ]
         );
 
-        return $this->json($request->getContent());
+        return $this->json(json_decode($request->getContent()));
     }
 
     /**
