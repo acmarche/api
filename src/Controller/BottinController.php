@@ -138,7 +138,7 @@ class BottinController extends AbstractController
         if (!is_array($ids)) {
             return new JsonResponse(['error' => 1, 'message' => 'Format json invalide']);
         }
-        if (count($ids) > 1) {
+        if (count($ids) < 1) {
             return new JsonResponse(['error' => 1, 'message' => 'Au moins un id est nécessaire']);
         }
 
