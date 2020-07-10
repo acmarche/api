@@ -141,13 +141,14 @@ class BottinController extends AbstractController
         if (count($ids) < 1) {
             return new JsonResponse(['error' => 1, 'message' => 'Au moins un id est nécessaire']);
         }
-
+        $ids = json_encode([393, 522, 55]);
+        $fields = ['ids' => $ids];
         $url = $this->baseUrl.'/bottin/fichebyids';
         $request = $this->httpClient->request(
             "POST",
             $url,
             [
-                'body' => ['ids' => $request->request->get('ids')],
+                'body' => $fields,
             ]
         );
 
