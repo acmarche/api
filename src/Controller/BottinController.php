@@ -128,7 +128,7 @@ class BottinController extends AbstractController
     /**
      * @Route("/bottin/fichebyids", name="bottin_api_fiche_ids", methods={"POST"}, format="json")
      */
-    public function ficheByIds(Request $request): JsonResponse
+    public function ficheByIds(Request $request): Response
     {
         $ids = json_decode($request->request->get('ids'), true);
 
@@ -141,9 +141,8 @@ class BottinController extends AbstractController
         if (count($ids) < 1) {
             return new JsonResponse(['error' => 1, 'message' => 'Au moins un id est nécessaire']);
         }
-        $ids = json_encode([393, 522, 55]);
-        $fields = ['ids' => $ids];
         $url = $this->baseUrl.'/bottin/fichebyids';
+        $fields = ['ids' => json_encode($ids)];
         $request = $this->httpClient->request(
             "POST",
             $url,
@@ -152,7 +151,7 @@ class BottinController extends AbstractController
             ]
         );
 
-        return $this->json(json_decode($request->getContent()));
+        return new Response($request->getContent());
     }
 
     /**
