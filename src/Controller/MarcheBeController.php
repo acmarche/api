@@ -28,7 +28,7 @@ class MarcheBeController extends AbstractController
      */
     public function index()
     {
-        $content_json = file_get_contents("http://www.marche.be/mobile.php");
+        $content_json = file_get_contents("https://www.marche.be/api/actus.php");
         $actus = json_decode($content_json);
 
         $new = array();

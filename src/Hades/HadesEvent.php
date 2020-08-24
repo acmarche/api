@@ -78,7 +78,7 @@ Class HadesEvent extends Hades {
     /**
      * A gauche les noms requis pour l'appli
      * a droite les noms dans le flux
-     * @return type
+     * @return array
      */
     public function getFields() {
 
