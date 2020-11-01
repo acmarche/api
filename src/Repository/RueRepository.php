@@ -4,7 +4,7 @@ namespace AcMarche\Api\Repository;
 
 use AcMarche\Api\Entity\Rue;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method Rue|null find($id, $lockMode = null, $lockVersion = null)
