@@ -16,7 +16,7 @@ Class HadesEvent extends Hades {
 
         $date = new \DateTime();
         $start = $date->format("Y-m-d");
-        $end = $date->modify('+15 day')->format("Y-m-d");
+        $end = $date->modify('+6 month')->format("Y-m-d");
 
         $fields = $this->getFields();
 
