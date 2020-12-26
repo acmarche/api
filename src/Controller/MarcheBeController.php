@@ -38,7 +38,7 @@ class MarcheBeController extends AbstractController
             // var_dump($post);
             $title = $post->post_title;
             //echo $title.'<br />';
-            $id = $post->ID;
+            $id = $post->post_id;
             $guid = $post->guid;
             $post_excerpt = $post->post_excerpt;
             $content = $post->post_content;
