@@ -53,6 +53,7 @@ class MarcheBeController extends AbstractController
             $new[$i]["url"] = $guid;
             $new[$i]["date"] = $date_english;
             $new[$i]["id"] = $id;
+            $new[$i]["image"] = $post->image;
             $new[$i]["thumbnail"] = $post_thumbnail;
             $i++;
         }
