@@ -220,6 +220,24 @@ class BottinController extends AbstractController
         return $value;
     }
 
+    /**
+     * @Route("/bottin/categories", name="bottin_api_categories", methods={"GET"}, format="json")
+     */
+    public function categories(): JsonResponse
+    {
+        $value = $this->cache->get(
+            'categories',
+            function (ItemInterface $item) {
+                $item->expiresAfter(18000);
+                $url = $this->baseUrl.'/bottin/categories';
+
+                return $this->json($this->execute($url));
+            }
+        );
+
+        return $value;
+    }
+
     private function execute(string $url): array
     {
         $request = $this->httpClient->request("GET", $url);
