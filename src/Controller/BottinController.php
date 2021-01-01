@@ -202,6 +202,24 @@ class BottinController extends AbstractController
         return new JsonResponse($request->getContent());
     }
 
+    /**
+     * @Route("/bottin/classements", name="bottin_api_classements", methods={"GET"}, format="json")
+     */
+    public function classements(): JsonResponse
+    {
+        $value = $this->cache->get(
+            'classements',
+            function (ItemInterface $item) {
+                $item->expiresAfter(18000);
+                $url = $this->baseUrl.'/bottin/classements';
+
+                return $this->json($this->execute($url));
+            }
+        );
+
+        return $value;
+    }
+
     private function execute(string $url): array
     {
         $request = $this->httpClient->request("GET", $url);
