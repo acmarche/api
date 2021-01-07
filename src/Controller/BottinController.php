@@ -69,6 +69,24 @@ class BottinController extends AbstractController
     }
 
     /**
+     * @Route("/bottin/fichesandroid", name="bottin_api_fiches_all", methods={"GET"}, format="json")
+     */
+    public function fichesAll(): JsonResponse
+    {
+        $value = $this->cache->get(
+            'allfiches',
+            function (ItemInterface $item) {
+                $item->expiresAfter(18000);
+                $url = $this->baseUrl.'/bottin/fichesandroid';
+
+                return $this->json($this->execute($url));
+            }
+        );
+
+        return $value;
+    }
+
+    /**
      * @Route("/bottin/commerces", name="bottin_api_commerces", methods={"GET"}, format="json")
      */
     public function commerces(): JsonResponse
