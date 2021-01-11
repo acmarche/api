@@ -76,7 +76,7 @@ class BottinController extends AbstractController
         $value = $this->cache->get(
             'allfichesandroid',
             function (ItemInterface $item) {
-                $item->expiresAfter(0);
+                $item->expiresAfter(18000);
                 $url = $this->baseUrl.'/bottin/fichesandroid';
 
                 return $this->json($this->execute($url));
