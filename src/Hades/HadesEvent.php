@@ -50,15 +50,18 @@ Class HadesEvent extends Hades {
                     foreach ($fields as $mobile => $field) {
                         $new[$i][$mobile] = $event->$field->__toString();
                     }
+                    $new[$i]['geopoint'] = $new[$i]['latitude'].','.$new[$i]['longitude'];
                     $i++;
                 }
             }
+
         }
 
         $new = $this->sortEvents($new);
 
         return $new;
     }
+
 
     protected function sortEvents($events) {
         usort($events, function($a, $b) {
