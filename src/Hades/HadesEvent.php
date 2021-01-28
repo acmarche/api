@@ -2,16 +2,19 @@
 
 namespace AcMarche\Api\Hades;
 
-Class HadesEvent extends Hades {
+class HadesEvent extends Hades
+{
 
     protected $offre = "evenements";
 
-    public function getOffre() {
+    public function getOffre()
+    {
 
         return $this->offre;
     }
 
-    public function getItems() {
+    public function getItems()
+    {
         $events = $this->getDataFromXml($this->getOffre());
 
         $date = new \DateTime();
@@ -29,12 +32,12 @@ Class HadesEvent extends Hades {
 
         foreach ($events as $event) {
             //   var_dump($event);
-            $cp = (int) $event->loc_cp;
+            $cp = (int)$event->loc_cp;
             if ($cp == 6900) {
 
-                $eveFin = (string) $event->eve_date_fin;
-                $eveDebut = (string) $event->eve_date_debut;
-                $eve_date_affichage = (string) $event->eve_date_affichage;
+                $eveFin = (string)$event->eve_date_fin;
+                $eveDebut = (string)$event->eve_date_debut;
+                $eve_date_affichage = (string)$event->eve_date_affichage;
 
                 if ($eveDebut >= $start && $eveFin <= $end) {
 
@@ -50,7 +53,8 @@ Class HadesEvent extends Hades {
                     foreach ($fields as $mobile => $field) {
                         $new[$i][$mobile] = $event->$field->__toString();
                     }
-                    $new[$i]['geopoint'] = $new[$i]['latitude'].','.$new[$i]['longitude'];
+                    if ($new[$i]['latitude'] != '')
+                        $new[$i]['geopoint'] = $new[$i]['latitude'] . ',' . $new[$i]['longitude'];
                     $i++;
                 }
             }
@@ -63,11 +67,12 @@ Class HadesEvent extends Hades {
     }
 
 
-    protected function sortEvents($events) {
-        usort($events, function($a, $b) {
+    protected function sortEvents($events)
+    {
+        usort($events, function ($a, $b) {
 
-            $as = (string) $a['date_debut'];
-            $bs = (string) $b['date_debut'];
+            $as = (string)$a['date_debut'];
+            $bs = (string)$b['date_debut'];
 
             if ($as == $bs) {
                 return 0;
@@ -83,14 +88,15 @@ Class HadesEvent extends Hades {
      * a droite les noms dans le flux
      * @return array
      */
-    public function getFields() {
+    public function getFields()
+    {
 
         $base = array(
             'id' => 'eve_id',
             'titre' => 'eve_titre_fr',
             'description' => 'eve_desc_fr',
-                //   'date_maj' => 'lastmod',
-                //   'code_CGT' => 'eve_codecgt'
+            //   'date_maj' => 'lastmod',
+            //   'code_CGT' => 'eve_codecgt'
         );
 
         $complements = array(
@@ -116,7 +122,8 @@ Class HadesEvent extends Hades {
         return array_merge($base, $complements);
     }
 
-    public function getImages($post) {
+    public function getImages($post)
+    {
 
         $photos = get_metadata('hades', $post->ID, $this->getPrefix() . 'photo', true);
 
@@ -134,7 +141,11 @@ Class HadesEvent extends Hades {
 
             if ($header['Content-Type'] == 'image/jpeg') {
                 ?>
-                <a href="<?php echo $photo ?>" rel="groupevent" class="fancybox"><img id="photo_ftlb" src="<?php echo $photo ?>" alt="photo" class="photoHebergement" rel="lightbox-imagesetname"></a>
+                <a href="<?php echo $photo ?>" rel="groupevent" class="fancybox"><img id="photo_ftlb"
+                                                                                      src="<?php echo $photo ?>"
+                                                                                      alt="photo"
+                                                                                      class="photoHebergement"
+                                                                                      rel="lightbox-imagesetname"></a>
                 <?php
             }
         }
@@ -143,7 +154,8 @@ Class HadesEvent extends Hades {
         <?php
     }
 
-    public static function getPdfAgenda($idEve, $titre) {
+    public static function getPdfAgenda($idEve, $titre)
+    {
 
         $PathImg = "http://www.ftlb.be/dbimages/docs/";
         $PathFilePdf = $PathImg . "event" . $idEve;
@@ -155,7 +167,9 @@ Class HadesEvent extends Hades {
         if ($header['Content-Type'] == 'application/pdf') {
             ?>
             <br clear="all"/>Vous pouvez également consulter le pdf suivant :
-            <a href="<?php echo $url ?>.pdf"><img id="pdf_ftlb" src="<?php echo plugin_dir_url(__FILE__) ?>/images/pdf.png" alt="pdf"><?php echo $titre ?>.pdf</a>
+            <a href="<?php echo $url ?>.pdf"><img id="pdf_ftlb"
+                                                  src="<?php echo plugin_dir_url(__FILE__) ?>/images/pdf.png"
+                                                  alt="pdf"><?php echo $titre ?>.pdf</a>
 
             <?php
         }
@@ -165,4 +179,5 @@ Class HadesEvent extends Hades {
     }
 
 }
+
 ?>
