@@ -123,6 +123,25 @@ class BottinController extends AbstractController
     }
 
     /**
+     * Enfance jeunesse
+     * @Route("/bottin/nocache/fiches/rubrique/{id}", name="bottin_api_fiche_by_category_nocache", methods={"GET"}, format="json")
+     */
+    public function ficheByCategoryNoCache($id): JsonResponse
+    {
+        $value = $this->cache->get(
+            'fichebycategory-'.$id,
+            function (ItemInterface $item) use ($id) {
+                $item->expiresAfter(18000);
+                $url = $this->baseUrl.'/bottin/fiches/category/'.$id;
+
+                return $this->json($this->execute($url));
+            }
+        );
+
+        return $value;
+    }
+
+    /**
      * @Route("/bottin/fiche/{id}", name="bottin_api_fiche_id", methods={"GET"}, format="json")
      */
     public function ficheById(int $id): JsonResponse
