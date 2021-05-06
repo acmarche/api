@@ -228,6 +228,8 @@ class BottinController extends AbstractController
         $fields = $request->request->all();
         $url = $this->baseUrl.'/updatefiche';
         $this->logger->critical('##api## url api update fiche '.$this->baseUrl.'/updatefiche');
+        $this->logger->critical('##api## url api update fiche data '.json_encode($fields));
+
         try {
             $request = $this->httpClient->request(
                 "POST",
