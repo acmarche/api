@@ -227,9 +227,10 @@ class BottinController extends AbstractController
     {
         $fields = $request->getContent();
         $url = $this->baseUrl.'/updatefiche';
-        $this->logger->info('##api## url api update fiche data '.json_encode($fields));
 
-        if (isset($fields['id'])) {
+            $this->logger->critical('##api## error api update fiche '.$fields);
+
+        if (!isset($fields['id'])) {
             $this->logger->critical('##api## error api update fiche id manquant ');
             return  new JsonResponse(['error' => 'id manquant']);
         }
