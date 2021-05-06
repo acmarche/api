@@ -221,8 +221,7 @@ class BottinController extends AbstractController
     }
 
     /**
-     *
-     * @Route("/admin/updatefiche", name="bottin_api_update_fiche", methods={"GET"}, format="json")
+     * @Route("/admin/updatefiche", name="bottin_api_update_fiche", methods={"POST"}, format="json")
      */
     public function updatefiche(Request $request)
     {
