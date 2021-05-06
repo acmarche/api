@@ -225,7 +225,7 @@ class BottinController extends AbstractController
      */
     public function updatefiche(Request $request)
     {
-        $fields = json_decode($request->getContent());
+        $fields = (array) json_decode($request->getContent());
         $url = $this->baseUrl.'/updatefiche';
 
         if (!isset($fields['id'])) {
