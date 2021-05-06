@@ -3,6 +3,7 @@
 namespace AcMarche\Api\Controller;
 
 use AcMarche\Api\Logger\LoggerDb;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -38,17 +39,23 @@ class BottinController extends AbstractController
      * @var FilesystemAdapter
      */
     private $cache;
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
 
     public function __construct(
         HttpClientInterface $httpClient,
         CacheInterface $cache,
         LoggerDb $loggerDb,
+        LoggerInterface $logger,
         string $baseUrl
     ) {
         $this->httpClient = $httpClient;
         $this->baseUrl = $baseUrl;
         $this->loggerDb = $loggerDb;
         $this->cache = $cache;
+        $this->logger = $logger;
     }
 
     /**
@@ -215,9 +222,9 @@ class BottinController extends AbstractController
 
     /**
      *
-     * @Route("/admin/updatefiche", name="bottin_api_update_fiche", methods={"POST"}, format="json")
+     * @Route("/admin/updatefiche", name="bottin_api_update_fiche", methods={"GET"}, format="json")
      */
-    public function updatefiche(Request $request): JsonResponse
+    public function updatefiche(Request $request)
     {
         $fields = $request->request->all();
         $url = $this->baseUrl.'/updatefiche';
@@ -230,10 +237,14 @@ class BottinController extends AbstractController
                 ]
             );
         } catch (TransportExceptionInterface $e) {
+            $this->logger->critical('error api update fiche '.$e->getMessage());
+
             return $this->json(['error' => $e->getMessage()]);
         }
+        $content = $request->getContent();
+        $this->logger->critical('api update fiche '.$content);
 
-        return new JsonResponse($request->getContent());
+        return new JsonResponse($content);
     }
 
     /**
