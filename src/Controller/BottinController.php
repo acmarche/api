@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
@@ -220,13 +221,17 @@ class BottinController extends AbstractController
     {
         $fields = $request->request->all();
         $url = $this->baseUrl.'/updatefiche';
-        $request = $this->httpClient->request(
-            "POST",
-            $url,
-            [
-                'body' => $fields,
-            ]
-        );
+        try {
+            $request = $this->httpClient->request(
+                "POST",
+                $url,
+                [
+                    'body' => $fields,
+                ]
+            );
+        } catch (TransportExceptionInterface $e) {
+            return $this->json(['error' => $e->getMessage()]);
+        }
 
         return new JsonResponse($request->getContent());
     }
