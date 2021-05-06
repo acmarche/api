@@ -228,6 +228,7 @@ class BottinController extends AbstractController
     {
         $fields = $request->request->all();
         $url = $this->baseUrl.'/updatefiche';
+        $this->logger->critical('##api## url api update fiche '.$this->baseUrl.'/updatefiche');
         try {
             $request = $this->httpClient->request(
                 "POST",
@@ -237,12 +238,12 @@ class BottinController extends AbstractController
                 ]
             );
         } catch (TransportExceptionInterface $e) {
-            $this->logger->critical('error api update fiche '.$e->getMessage());
+            $this->logger->critical('##api## error api update fiche '.$e->getMessage());
 
             return $this->json(['error' => $e->getMessage()]);
         }
         $content = $request->getContent();
-        $this->logger->critical('api update fiche '.$content);
+        $this->logger->critical('##api## update fiche '.$content);
 
         return new JsonResponse($content);
     }
