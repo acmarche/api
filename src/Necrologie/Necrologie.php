@@ -9,24 +9,14 @@ use Twig\Environment;
 
 class Necrologie
 {
-    /**
-     * @var CacheItemPoolInterface
-     */
-    private $cache;
-    /**
-     * @var Environment
-     */
-    private $environment;
-
-    public function __construct(CacheItemPoolInterface $cache, Environment $environment)
+    public function __construct(private CacheItemPoolInterface $cache, private Environment $environment)
     {
-        $this->cache = $cache;
-        $this->environment = $environment;
+
     }
 
     public function getNecro(bool $fullpage = false)
     {
-        $necrologie = $this->cache->getItem('necrologie_' . $fullpage);
+        $necrologie = $this->cache->getItem('necrologie_'.$fullpage);
 
         if (!$necrologie->isHit()) {
             $pensees = $this->getDansNosPensees();
@@ -58,22 +48,11 @@ class Necrologie
 
     private function getDansNosPensees()
     {
-        $url = "http://www.dansnospensees.be/rss.svc/fr/rss/recent/6900";
-        $flux = file_get_contents($url);
-        if (!$flux) {
-            return '<h3 class="text-danger">La source n\'a pas pu être lue</h3>';
-        }
-
-        $xml = new \SimpleXmlElement($flux);
-        $channel = $xml->channel;
-
-        return $this->environment->render(
-            '@AcMarcheApi/marchebe/deces/_pensee.html.twig',
-            [
-                'title' => $channel,
-                'items' => $channel->item,
-            ]
-        );
+            return '
+                <h3 class="text-success">
+                <a href="https://www.dansnospensees.be/">
+                https://www.dansnospensees.be/</a>
+                </h3>';
     }
 
     private function getEnaos()
@@ -82,11 +61,11 @@ class Necrologie
 
         $service = new SoapClient(
             $url, array(
-                    'soap_version' => SOAP_1_2,
-                    'trace' => true,
-                    'connection_timeout' => 4,
-                    'exceptions' => true,
-                )
+                'soap_version' => SOAP_1_2,
+                'trace' => true,
+                'connection_timeout' => 4,
+                'exceptions' => true,
+            )
         );
 
         $page = 1;
@@ -119,6 +98,6 @@ class Necrologie
         );
         $content = preg_replace("|#URL-ANNONCE#|", "http://www.enaos.net", $content);
 
-        return $titre . $content;
+        return $titre.$content;
     }
 }
