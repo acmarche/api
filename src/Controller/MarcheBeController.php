@@ -25,10 +25,7 @@ class MarcheBeController extends AbstractController
         $new = array();
         $i = 0;
         foreach ($actus as $post) {
-            // var_dump($post);
             $title = $post->post_title;
-            //echo $title.'<br />';
-            $id = $post->ID;
             $guid = $post->guid;
             $post_excerpt = $post->post_excerpt;
             $content = $post->post_content;
@@ -36,15 +33,20 @@ class MarcheBeController extends AbstractController
             $date_english = $post_date->format('Y-m-d');
             $post_thumbnail = $post->post_thumbnail_url;
 
-            $permalink = $post->permalink;
+            if (!isset($post->image)) {
+                $image = $post_thumbnail;
+            } else {
+                $image = $post->image;
+            }
+
             $new[$i]["intitule"] = $title;
             $new[$i]["extrait"] = $post_excerpt;
             $new[$i]["content"] = $content;
             $new[$i]["url"] = $guid;
             $new[$i]["date"] = $date_english;
             $new[$i]["id"] = $post->ID;
-            $new[$i]["image"] = $post->image;
-            $new[$i]["thumbnail"] = $post_thumbnail;
+            $new[$i]["image"] = $image;
+            $new[$i]["thumbnail"] = $image;
             $i++;
         }
 

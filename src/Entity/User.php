@@ -7,10 +7,11 @@ use AcMarche\Api\Entity\Traits\NomTrait;
 use AcMarche\Api\Entity\Traits\RoleTrait;
 use AcMarche\Api\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User implements UserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     use EmailTrait,
         NomTrait,
