@@ -16,7 +16,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         'security',
         [
             'providers' => [
-                'bottin_user_provider' => [
+                'api_user_provider' => [
                     'entity' => [
                         'class' => User::class,
                         'property' => 'username',
@@ -29,7 +29,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $authenticators = [ApiAuthenticator::class];
 
     $main = [
-        'provider' => 'bottin_user_provider',
+        'lazy' => true,
+        'provider' => 'api_user_provider',
         'logout' => ['path' => 'app_logout'],
         'form_login' => [],
         'entry_point' => ApiAuthenticator::class,
@@ -37,11 +38,34 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $main['custom_authenticator'] = $authenticators;
 
+    $api = [
+        'pattern' =>
+            '^/bottin',
+        'http_basic' => [
+            'realm' => 'Secured Area',
+            'provider' => 'api_user_provider',
+        ],
+    ];
+
+    $dev = [
+        'pattern' =>
+            '^/(_(profiler|wdt)|css|images|js)/',
+        'security' => false,
+    ];
+
+    $access = [
+        'path' => '^/admin',
+        'roles' => ['ROLE_ADMIN'],
+    ];
+
     $containerConfigurator->extension(
         'security',
         [
+            'access_control' => [$access],
             'firewalls' => [
                 'main' => $main,
+                'api_protect' => $api,
+                'dev' => $dev,
             ],
         ]
     );
