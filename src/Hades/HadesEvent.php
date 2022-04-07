@@ -2,6 +2,7 @@
 
 namespace AcMarche\Api\Hades;
 
+use DateTime;
 class HadesEvent extends Hades
 {
 
@@ -17,7 +18,7 @@ class HadesEvent extends Hades
     {
         $events = $this->getDataFromXml($this->getOffre());
 
-        $date = new \DateTime();
+        $date = new DateTime();
         $start = $date->format("Y-m-d");
         $end = $date->modify('+6 month')->format("Y-m-d");
 
@@ -46,7 +47,7 @@ class HadesEvent extends Hades
                     if (is_array($dateAffichage)) {
                         array_pop($dateAffichage);
 
-                        $date_affichage = join('/', $dateAffichage);
+                        $date_affichage = implode('/', $dateAffichage);
                         $event->eve_date_affichage = $date_affichage;
                     }
 
@@ -61,9 +62,7 @@ class HadesEvent extends Hades
 
         }
 
-        $new = $this->sortEvents($new);
-
-        return $new;
+        return $this->sortEvents($new);
     }
 
 
@@ -73,11 +72,7 @@ class HadesEvent extends Hades
 
             $as = (string)$a['date_debut'];
             $bs = (string)$b['date_debut'];
-
-            if ($as == $bs) {
-                return 0;
-            }
-            return $as > $bs ? 1 : -1;
+            return $bs <=> $as;
         });
 
         return $events;
@@ -86,9 +81,8 @@ class HadesEvent extends Hades
     /**
      * A gauche les noms requis pour l'appli
      * a droite les noms dans le flux
-     * @return array
      */
-    public function getFields()
+    public function getFields(): array
     {
 
         $base = array(
@@ -154,7 +148,7 @@ class HadesEvent extends Hades
         <?php
     }
 
-    public static function getPdfAgenda($idEve, $titre)
+    public static function getPdfAgenda($idEve, $titre): void
     {
 
         $PathImg = "http://www.ftlb.be/dbimages/docs/";

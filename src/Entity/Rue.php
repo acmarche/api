@@ -3,31 +3,22 @@
 namespace AcMarche\Api\Entity;
 
 use AcMarche\Api\Entity\Traits\IdTrait;
+use AcMarche\Api\Repository\RueRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass="AcMarche\Api\Repository\RueRepository")
- */
+#[ORM\Entity(repositoryClass: RueRepository::class)]
 class Rue
 {
     use IdTrait;
 
-    /**
-     * @ORM\Column(type="string", length=100)
-     */
+    #[ORM\Column(type: 'string', length: 100)]
     private string $code;
-
-    /**
-     * @ORM\Column(type="string", length=200)
-     */
+    #[ORM\Column(type: 'string', length: 200)]
     private string $nom;
-
-    /**
-     * @ORM\Column(type="string", length=200)
-     */
+    #[ORM\Column(type: 'string', length: 200)]
     private string $localite;
 
-    public function getCode(): ?string
+    public function getCode(): string
     {
         return $this->code;
     }
@@ -39,7 +30,7 @@ class Rue
         return $this;
     }
 
-    public function getNom(): ?string
+    public function getNom(): string
     {
         return $this->nom;
     }
@@ -51,14 +42,13 @@ class Rue
         return $this;
     }
 
-    public function getLocalite(): ?string
+    public function getLocalite(): string
     {
         return $this->localite;
     }
 
-    public function setLocalite(string $localite): self
+    public function setLocalite(string $localite): void
     {
         $this->localite = $localite;
     }
-
 }

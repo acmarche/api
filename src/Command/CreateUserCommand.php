@@ -14,26 +14,16 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class CreateUserCommand extends Command
 {
     protected static $defaultName = 'api:create-user';
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
-    /**
-     * @var UserPasswordHasherInterface
-     */
-    private $userPasswordEncoder;
 
     public function __construct(
-        UserRepository $userRepository,
-        UserPasswordHasherInterface $userPasswordEncoder,
+        private UserRepository $userRepository,
+        private UserPasswordHasherInterface $userPasswordEncoder,
         string $name = null
     ) {
         parent::__construct($name);
-        $this->userRepository = $userRepository;
-        $this->userPasswordEncoder = $userPasswordEncoder;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Création d\'un utilisateur')

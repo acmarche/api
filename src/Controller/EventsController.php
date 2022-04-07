@@ -7,15 +7,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/agenda")
- */
+#[Route(path: '/agenda')]
 class EventsController extends AbstractController
 {
-    /**
-     * @Route("/evenements", name="events")
-     */
-    public function index()
+    #[Route(path: '/evenements', name: 'events')]
+    public function index(): JsonResponse
     {
         $hadesEvent = new HadesEvent();
         $events = $hadesEvent->getItems();

@@ -5,7 +5,6 @@ namespace AcMarche\Api\Controller;
 use AcMarche\Api\Logger\LoggerDb;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,47 +22,19 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
  */
 class BottinController extends AbstractController
 {
-    /**
-     * @var HttpClientInterface
-     */
-    private $httpClient;
-    /**
-     * @var string
-     */
-    private $baseUrl;
-    /**
-     * @var LoggerDb
-     */
-    private $loggerDb;
-    /**
-     * @var FilesystemAdapter
-     */
-    private $cache;
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    private $logger;
-
     public function __construct(
-        HttpClientInterface $httpClient,
-        CacheInterface $cache,
-        LoggerDb $loggerDb,
-        LoggerInterface $logger,
-        string $baseUrl
+        private HttpClientInterface $httpClient,
+        private CacheInterface $cache,
+        private LoggerDb $loggerDb,
+        private LoggerInterface $logger,
+        private string $baseUrl
     ) {
-        $this->httpClient = $httpClient;
-        $this->baseUrl = $baseUrl;
-        $this->loggerDb = $loggerDb;
-        $this->cache = $cache;
-        $this->logger = $logger;
     }
 
-    /**
-     * @Route("/bottin/fiches", name="bottin_api_fiches", methods={"GET"}, format="json")
-     */
+    #[Route(path: '/bottin/fiches', name: 'bottin_api_fiches', methods: ['GET'], format: 'json')]
     public function fiches(): JsonResponse
     {
-        $value = $this->cache->get(
+        return $this->cache->get(
             'allfiches',
             function (ItemInterface $item) {
                 $item->expiresAfter(18000);
@@ -72,16 +43,12 @@ class BottinController extends AbstractController
                 return $this->json($this->execute($url));
             }
         );
-
-        return $value;
     }
 
-    /**
-     * @Route("/bottin/fichesandroid", name="bottin_api_fiches_all", methods={"GET"}, format="json")
-     */
+    #[Route(path: '/bottin/fichesandroid', name: 'bottin_api_fiches_all', methods: ['GET'], format: 'json')]
     public function fichesAll(): JsonResponse
     {
-        $value = $this->cache->get(
+        return $this->cache->get(
             'allfichesandroid',
             function (ItemInterface $item) {
                 $item->expiresAfter(18000);
@@ -90,16 +57,12 @@ class BottinController extends AbstractController
                 return $this->json($this->execute($url));
             }
         );
-
-        return $value;
     }
 
-    /**
-     * @Route("/bottin/commerces", name="bottin_api_commerces", methods={"GET"}, format="json")
-     */
+    #[Route(path: '/bottin/commerces', name: 'bottin_api_commerces', methods: ['GET'], format: 'json')]
     public function commerces(): JsonResponse
     {
-        $value = $this->cache->get(
+        return $this->cache->get(
             'commerces',
             function (ItemInterface $item) {
                 $item->expiresAfter(18000);
@@ -108,16 +71,12 @@ class BottinController extends AbstractController
                 return $this->json($this->execute($url));
             }
         );
-
-        return $value;
     }
 
-    /**
-     * @Route("/bottin/fiches/rubrique/{id}", name="bottin_api_fiche_by_category", methods={"GET"}, format="json")
-     */
+    #[Route(path: '/bottin/fiches/rubrique/{id}', name: 'bottin_api_fiche_by_category', methods: ['GET'], format: 'json')]
     public function ficheByCategory($id): JsonResponse
     {
-        $value = $this->cache->get(
+        return $this->cache->get(
             'fichebycategory-'.$id,
             function (ItemInterface $item) use ($id) {
                 $item->expiresAfter(18000);
@@ -126,14 +85,12 @@ class BottinController extends AbstractController
                 return $this->json($this->execute($url));
             }
         );
-
-        return $value;
     }
 
     /**
      * Enfance jeunesse
-     * @Route("/bottin/nocache/fiches/rubrique/{id}", name="bottin_api_fiche_by_category_nocache", methods={"GET"}, format="json")
      */
+    #[Route(path: '/bottin/nocache/fiches/rubrique/{id}', name: 'bottin_api_fiche_by_category_nocache', methods: ['GET'], format: 'json')]
     public function ficheByCategoryNoCache($id): JsonResponse
     {
         $url = $this->baseUrl.'/bottin/fiches/category/'.$id;
@@ -141,9 +98,7 @@ class BottinController extends AbstractController
         return $this->json($this->execute($url));
     }
 
-    /**
-     * @Route("/bottin/fiche/{id}", name="bottin_api_fiche_id", methods={"GET"}, format="json")
-     */
+    #[Route(path: '/bottin/fiche/{id}', name: 'bottin_api_fiche_id', methods: ['GET'], format: 'json')]
     public function ficheById(int $id): JsonResponse
     {
         $url = $this->baseUrl.'/bottin/fichebyid/'.$id;
@@ -151,9 +106,7 @@ class BottinController extends AbstractController
         return $this->json($this->execute($url));
     }
 
-    /**
-     * @Route("/bottin/fichebyslugname/{slug}", name="bottin_api_fiche_slug", methods={"GET"}, format="json")
-     */
+    #[Route(path: '/bottin/fichebyslugname/{slug}', name: 'bottin_api_fiche_slug', methods: ['GET'], format: 'json')]
     public function ficheSlug(string $slug): JsonResponse
     {
         $slug = preg_replace("#\.#", "", $slug);
@@ -162,13 +115,10 @@ class BottinController extends AbstractController
         return $this->json($this->execute($url));
     }
 
-    /**
-     * @Route("/bottin/fichebyids", name="bottin_api_fiche_ids", methods={"POST"}, format="json")
-     */
+    #[Route(path: '/bottin/fichebyids', name: 'bottin_api_fiche_ids', methods: ['POST'], format: 'json')]
     public function ficheByIds(Request $request): Response
     {
-        $ids = json_decode($request->request->get('ids'), true);
-
+        $ids = json_decode($request->request->get('ids'), true, 512, JSON_THROW_ON_ERROR);
         if (!$ids) {
             return new JsonResponse(['error' => 1, 'message' => 'Paramète ids obligatoire']);
         }
@@ -179,7 +129,7 @@ class BottinController extends AbstractController
             return new JsonResponse(['error' => 1, 'message' => 'Au moins un id est nécessaire']);
         }
         $url = $this->baseUrl.'/bottin/fichebyids';
-        $fields = ['ids' => json_encode($ids)];
+        $fields = ['ids' => json_encode($ids, JSON_THROW_ON_ERROR)];
         $request = $this->httpClient->request(
             "POST",
             $url,
@@ -192,19 +142,17 @@ class BottinController extends AbstractController
     }
 
     /**
-     * @Route("/search/bottin/fiches/_search", name="bottin_api_search", methods={"POST"}, format="json")
-     * @param Request $request
      * @return JsonResponse
      */
+    #[Route(path: '/search/bottin/fiches/_search', name: 'bottin_api_search', methods: ['POST'], format: 'json')]
     public function search(Request $request): Response
     {
-        $content = json_decode($request->getContent(), true);
+        $content = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
         $query = $content['query'];
         $bool = $query['bool'];
         $should = $bool['should'];
         $societe = $should['0']['match']['societe_autocomplete'];
         $keyword = preg_replace("#'#", " ", $societe);
-
         $url = $this->baseUrl.'/bottin/search';
         $request = $this->httpClient->request(
             "POST",
@@ -213,27 +161,22 @@ class BottinController extends AbstractController
                 'body' => ['keyword' => $keyword],
             ]
         );
-
         $content = $request->getContent();
         $this->loggerDb->logSearch($keyword);
 
         return new Response($content);
     }
 
-    /**
-     * @Route("/admin/updatefiche", name="bottin_api_update_fiche", methods={"POST"}, format="json")
-     */
-    public function updatefiche(Request $request)
+    #[Route(path: '/admin/updatefiche', name: 'bottin_api_update_fiche', methods: ['POST'], format: 'json')]
+    public function updatefiche(Request $request): JsonResponse
     {
-        $fields = (array) json_decode($request->getContent());
+        $fields = (array)json_decode($request->getContent(), null, 512, JSON_THROW_ON_ERROR);
         $url = $this->baseUrl.'/updatefiche';
-
         if (!isset($fields['id'])) {
             $this->logger->critical('##api## error api update fiche id manquant ');
 
             return new JsonResponse(['error' => 'id manquant']);
         }
-
         try {
             $request = $this->httpClient->request(
                 "POST",
@@ -253,12 +196,10 @@ class BottinController extends AbstractController
         return new JsonResponse($content);
     }
 
-    /**
-     * @Route("/bottin/classements", name="bottin_api_classements", methods={"GET"}, format="json")
-     */
+    #[Route(path: '/bottin/classements', name: 'bottin_api_classements', methods: ['GET'], format: 'json')]
     public function classements(): JsonResponse
     {
-        $value = $this->cache->get(
+        return $this->cache->get(
             'classements',
             function (ItemInterface $item) {
                 $item->expiresAfter(18000);
@@ -267,16 +208,12 @@ class BottinController extends AbstractController
                 return $this->json($this->execute($url));
             }
         );
-
-        return $value;
     }
 
-    /**
-     * @Route("/bottin/categories", name="bottin_api_categories", methods={"GET"}, format="json")
-     */
+    #[Route(path: '/bottin/categories', name: 'bottin_api_categories', methods: ['GET'], format: 'json')]
     public function categories(): JsonResponse
     {
-        $value = $this->cache->get(
+        return $this->cache->get(
             'categories',
             function (ItemInterface $item) {
                 $item->expiresAfter(18000);
@@ -285,14 +222,12 @@ class BottinController extends AbstractController
                 return $this->json($this->execute($url));
             }
         );
-
-        return $value;
     }
 
     private function execute(string $url): array
     {
         $request = $this->httpClient->request("GET", $url);
-        $content = json_decode($request->getContent(), true);
+        $content = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
         if (!$content) {
             return ['error' => 1, 'message' => 'Erreur'];
         }

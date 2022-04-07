@@ -9,17 +9,11 @@ use AcMarche\Api\Repository\CapSearchRepository;
 
 class LoggerDb
 {
-    /**
-     * @var CapSearchRepository
-     */
-    private $capSearchRepository;
-
-    public function __construct(CapSearchRepository $capSearchRepository)
+    public function __construct(private CapSearchRepository $capSearchRepository)
     {
-        $this->capSearchRepository = $capSearchRepository;
     }
 
-    public function logSearch(string $keyword)
+    public function logSearch(string $keyword): void
     {
         if (strlen($keyword) > 4) {
             $search = new CapSearch($keyword);

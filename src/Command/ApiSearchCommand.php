@@ -14,7 +14,7 @@ class ApiSearchCommand extends Command
 {
     protected static $defaultName = 'api:search';
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Add a short description for your command')

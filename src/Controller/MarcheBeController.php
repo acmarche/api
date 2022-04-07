@@ -3,37 +3,27 @@
 namespace AcMarche\Api\Controller;
 
 use AcMarche\Api\Necrologie\Necrologie;
+use DateTime;
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/marchebe")
- */
+#[Route(path: '/marchebe')]
 class MarcheBeController extends AbstractController
 {
-    /**
-     * @var Necrologie
-     */
-    private $necrologie;
-
-    public function __construct(Necrologie $necrologie)
+    public function __construct(private Necrologie $necrologie)
     {
-        $this->necrologie = $necrologie;
     }
 
-    /**
-     * @Route("/actualites", name="actualite")
-     */
-    public function index()
+    #[Route(path: '/actualites', name: 'actualite')]
+    public function index(): JsonResponse
     {
         $content_json = file_get_contents("https://www.marche.be/api/actus.php");
-        $actus = json_decode($content_json);
-
+        $actus = json_decode($content_json, null, 512, JSON_THROW_ON_ERROR);
         $new = array();
         $i = 0;
-
         foreach ($actus as $post) {
             // var_dump($post);
             $title = $post->post_title;
@@ -42,7 +32,7 @@ class MarcheBeController extends AbstractController
             $guid = $post->guid;
             $post_excerpt = $post->post_excerpt;
             $content = $post->post_content;
-            $post_date = new \DateTime($post->post_date);
+            $post_date = new DateTime($post->post_date);
             $date_english = $post_date->format('Y-m-d');
             $post_thumbnail = $post->post_thumbnail_url;
 
@@ -62,11 +52,11 @@ class MarcheBeController extends AbstractController
     }
 
     /**
-     * @Route("/necrologie/", name="necrologie")
-     * @Route("/necrologie/{fullpage}", name="necrologie_full")
      * @return string
-     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
+    #[Route(path: '/necrologie/', name: 'necrologie')]
+    #[Route(path: '/necrologie/{fullpage}', name: 'necrologie_full')]
     public function getNecrologie(bool $fullpage = false): Response
     {
         return new Response($this->necrologie->getNecro($fullpage));

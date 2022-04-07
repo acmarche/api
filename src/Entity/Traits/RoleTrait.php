@@ -8,9 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 trait RoleTrait
 {
-    /**
-     * @ORM\Column(type="json")
-     */
+    #[ORM\Column(type: 'json')]
     private array $roles = [];
 
     public function addRole(string $role): void

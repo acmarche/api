@@ -3,6 +3,7 @@
 
 namespace AcMarche\Api\Necrologie;
 
+use DateTime;
 use Psr\Cache\CacheItemPoolInterface;
 use SoapClient;
 use Twig\Environment;
@@ -39,14 +40,14 @@ class Necrologie
                     ]
                 );
             }
-            $necrologie->expiresAt(new \DateTime('tomorrow'));
+            $necrologie->expiresAt(new DateTime('tomorrow'));
             $this->cache->save($necrologie->set($html));
         }
 
         return $necrologie->get();
     }
 
-    private function getDansNosPensees()
+    private function getDansNosPensees(): string
     {
             return '
                 <h3 class="text-success">

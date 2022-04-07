@@ -16,13 +16,14 @@ Class HadesHotel extends Hades {
         return $this->type;
     }
 
-    public function getItems() {
-        $events = $this->getDataFromXml($this->getOffre());
-        return $events;
+    public function getItems(): array {
+        return $this->getDataFromXml($this->getOffre());
     }
 
-    public function filtre($param) {
+    public function filtre($param): void {
 
+        $log = null;
+        $cp = null;
         if (isset($log->$cp) && $log->$cp == '6900') {
 
         }
@@ -33,7 +34,7 @@ Class HadesHotel extends Hades {
      * a droite les noms dans le flux
      * @return type
      */
-    public function getFields() {
+    public function getFields(): array {
 
         $base = array(
             'id' => 'hot_id',

@@ -19,17 +19,17 @@ class CapSearchRepository extends ServiceEntityRepository
         parent::__construct($registry, CapSearch::class);
     }
 
-    public function remove(CapSearch $search)
+    public function remove(CapSearch $search): void
     {
         $this->_em->remove($search);
     }
 
-    public function flush()
+    public function flush(): void
     {
         $this->_em->flush();
     }
 
-    public function persist(CapSearch $search)
+    public function persist(CapSearch $search): void
     {
         $this->_em->persist($search);
     }

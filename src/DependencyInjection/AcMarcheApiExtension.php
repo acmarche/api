@@ -2,10 +2,11 @@
 
 namespace AcMarche\Api\DependencyInjection;
 
+use Symfony\Component\Config\Builder\ConfigBuilderGenerator;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
-use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
@@ -15,59 +16,55 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
  */
 class AcMarcheApiExtension extends Extension implements PrependExtensionInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function load(array $configs, ContainerBuilder $container)
+    private PhpFileLoader $loader;
+
+    public function load(array $configs, ContainerBuilder $containerBuilder): void
     {
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../../config'));
-        $loader->load('services.yaml');
+        $this->loader->load('services.php');
     }
 
     /**
      * Allow an extension to prepend the extension configurations.
      */
-    public function prepend(ContainerBuilder $container)
+    public function prepend(ContainerBuilder $containerBuilder): void
     {
-        // get all bundles
-        $bundles = $container->getParameter('kernel.bundles');
+        $this->loader = $this->initPhpFilerLoader($containerBuilder);
 
-        if (isset($bundles['DoctrineBundle'])) {
-            foreach ($container->getExtensions() as $name => $extension) {
-                switch ($name) {
-                    case 'doctrine':
-                        $this->loadConfig($container, 'doctrine');
-                        break;
-                    case 'twig':
-                        $this->loadConfig($container, 'twig');
-                        break;
-                    case 'liip_imagine':
-                        $this->loadConfig($container, 'liip_imagine');
-                        break;
-                    case 'framework':
-                        $this->loadConfig($container, 'security');
-                        break;
-                }
+        foreach (array_keys($containerBuilder->getExtensions()) as $name) {
+            switch ($name) {
+                case 'doctrine':
+                    $this->loadConfig('doctrine');
+
+                    break;
+                case 'twig':
+                    $this->loadConfig('twig');
+
+                    break;
+                case 'framework':
+                    $this->loadConfig('security');
+
+                    break;
+                case 'vich_uploader':
+
+                    break;
             }
         }
     }
 
-    protected function loadConfig(ContainerBuilder $container, string $name)
+    protected function loadConfig(string $name): void
     {
-        $configs = $this->loadYamlFile($container);
-
-        $configs->load($name.'.yaml');
+        $this->loader->load('packages/'.$name.'.php');
     }
 
-    /**
-     * @param ContainerBuilder $container
-     * @return Loader\YamlFileLoader
-     */
-    protected function loadYamlFile(ContainerBuilder $container): Loader\YamlFileLoader
+    protected function initPhpFilerLoader(ContainerBuilder $containerBuilder): PhpFileLoader
     {
-        return new Loader\YamlFileLoader(
-            $container,
-            new FileLocator(__DIR__.'/../../config/packages/')
+        return new PhpFileLoader(
+            $containerBuilder,
+            new FileLocator(__DIR__.'/../../config/'),
+            null,
+            class_exists(ConfigBuilderGenerator::class) ? new ConfigBuilderGenerator(
+                $containerBuilder->getParameter('kernel.cache_dir')
+            ) : null
         );
     }
 }

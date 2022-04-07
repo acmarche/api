@@ -16,9 +16,8 @@ Class HadesGite extends Hades {
         return $this->type;
     }
 
-    public function getItems() {
-        $events = $this->getDataFromXml($this->getOffre());
-        return $events;
+    public function getItems(): array {
+        return $this->getDataFromXml($this->getOffre());
     }
 
     /**
@@ -26,7 +25,7 @@ Class HadesGite extends Hades {
      * a droite les noms dans le flux
      * @return type
      */
-    public function getFields() {
+    public function getFields(): array {
 
         $base = array(
             'id' => 'git_id',

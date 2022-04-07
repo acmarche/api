@@ -9,9 +9,7 @@ abstract class Hades {
 
     public function getUrl() {
 
-        $url = $this->url . $this->getParams();
-
-        return $url;
+        return $this->url . $this->getParams();
     }
 
     public function getParams() {
@@ -31,8 +29,7 @@ abstract class Hades {
         $flux = @simplexml_load_file($url);
 
         if ($flux) {
-            $events = $flux->children();
-            return $events;
+            return $flux->children();
         }
 
         $error = libxml_get_errors();
@@ -61,7 +58,7 @@ abstract class Hades {
 
         foreach ($items as $item) {
 
-            if (isset($item->loc_cp) && $item->loc_cp == '6900') {
+            if (property_exists($item, 'loc_cp') && $item->loc_cp !== null && $item->loc_cp == '6900') {
 
                 foreach ($fields as $mobile => $field) {
                     $new[$i][$mobile] = (string) $item->$field;
