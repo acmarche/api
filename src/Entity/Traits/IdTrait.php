@@ -4,6 +4,8 @@
 namespace AcMarche\Api\Entity\Traits;
 
 
+use Doctrine\ORM\Mapping as ORM;
+
 trait IdTrait
 {
     /**
@@ -11,7 +13,7 @@ trait IdTrait
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     public function getId(): ?int
     {

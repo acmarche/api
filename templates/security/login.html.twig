@@ -13,6 +13,7 @@
             <img class="mb-4 img-fluid" title="Adl" src="{{ asset('bundles/acmarcheapi/images/marche.jpg') }}"
                  alt="logo" width="72">
             <h1 class="h3 mb-3 font-weight-normal">Authentification</h1>
+
             {% if error %}
                 <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
             {% endif %}

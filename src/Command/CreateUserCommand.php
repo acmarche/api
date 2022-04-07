@@ -9,7 +9,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class CreateUserCommand extends Command
 {
@@ -19,13 +19,13 @@ class CreateUserCommand extends Command
      */
     private $userRepository;
     /**
-     * @var UserPasswordEncoderInterface
+     * @var UserPasswordHasherInterface
      */
     private $userPasswordEncoder;
 
     public function __construct(
         UserRepository $userRepository,
-        UserPasswordEncoderInterface $userPasswordEncoder,
+        UserPasswordHasherInterface $userPasswordEncoder,
         string $name = null
     ) {
         parent::__construct($name);
@@ -71,7 +71,7 @@ class CreateUserCommand extends Command
         $user->setUsername($email);
         $user->setEmail($email);
         $user->setNom($name);
-        $user->setPassword($this->userPasswordEncoder->encodePassword($user, $password));
+        $user->setPassword($this->userPasswordEncoder->hashPassword($user, $password));
         $user->addRole('ROLE_ADMIN');
 
         $this->userRepository->persist($user);

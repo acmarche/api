@@ -14,8 +14,7 @@ security:
     main:
       anonymous: lazy
       provider: api_user_provider
-      guard:
-        authenticators:
+      custom_authenticator:
           - AcMarche\Api\Security\ApiAuthenticator
       logout:
         path: app_logout

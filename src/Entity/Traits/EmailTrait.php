@@ -3,6 +3,7 @@
 
 namespace AcMarche\Api\Entity\Traits;
 
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
@@ -13,7 +14,7 @@ trait EmailTrait
      * @Assert\Email()
      * @ORM\Column(name="email", type="string", length=50, unique=true)
      */
-    private $email;
+    private string $email;
 
     /**
      * @return string|null

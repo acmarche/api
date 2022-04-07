@@ -19,7 +19,7 @@ class CapSearch implements TimestampableInterface
     /**
      * @ORM\Column(type="string", length=200, nullable=false)
      */
-    private $keyword;
+    private string $keyword;
 
     public function __construct(string $keyword)
     {

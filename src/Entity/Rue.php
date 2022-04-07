@@ -15,17 +15,17 @@ class Rue
     /**
      * @ORM\Column(type="string", length=100)
      */
-    private $code;
+    private string $code;
 
     /**
      * @ORM\Column(type="string", length=200)
      */
-    private $nom;
+    private string $nom;
 
     /**
      * @ORM\Column(type="string", length=200)
      */
-    private $localite;
+    private string $localite;
 
     public function getCode(): ?string
     {
