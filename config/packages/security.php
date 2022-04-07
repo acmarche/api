@@ -63,9 +63,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         [
             'access_control' => [$access],
             'firewalls' => [
-                'main' => $main,
-                'api_protect' => $api,
                 'dev' => $dev,
+                'api_protect' => $api,
+                'main' => $main,
             ],
         ]
     );
