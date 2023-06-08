@@ -47,26 +47,19 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ],
     ];
 
-    $dev = [
-        'pattern' =>
-            '^/(_(profiler|wdt)|css|images|js)/',
-        'security' => false,
-    ];
-
     $access = [
         'path' => '^/admin',
         'roles' => ['ROLE_ADMIN'],
     ];
 
-    $containerConfigurator->extension(
+  /*  $containerConfigurator->extension(
         'security',
         [
             'access_control' => [$access],
             'firewalls' => [
-                'dev' => $dev,
                 'api_protect' => $api,
                 'main' => $main,
             ],
         ]
-    );
+    );*/
 };
