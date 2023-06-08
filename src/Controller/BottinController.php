@@ -224,6 +224,20 @@ class BottinController extends AbstractController
         );
     }
 
+    #[Route(path: '/bottin/categories/byparent/{id}', name: 'bottin_api_categories_by_parent', methods: ['GET'], format: 'json')]
+    public function categoriesByParent(int $id): JsonResponse
+    {
+        return $this->cache->get(
+            'categories_by_parent_'.$id,
+            function (ItemInterface $item) use ($id) {
+                $item->expiresAfter(18000);
+                $url = $this->baseUrl.'/bottin/categories/parent/'.$id;
+
+                return $this->json($this->execute($url));
+            }
+        );
+    }
+
     private function execute(string $url): array
     {
         $request = $this->httpClient->request("GET", $url);
