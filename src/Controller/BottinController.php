@@ -2,6 +2,7 @@
 
 namespace AcMarche\Api\Controller;
 
+use AcMarche\Api\Http\CapApi;
 use AcMarche\Api\Logger\LoggerDb;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,6 +28,7 @@ class BottinController extends AbstractController
         private CacheInterface $cache,
         private LoggerDb $loggerDb,
         private LoggerInterface $logger,
+        private CapApi $capApi,
         private string $baseUrl
     ) {
     }
@@ -77,12 +79,32 @@ class BottinController extends AbstractController
     public function ficheByCategory($id): JsonResponse
     {
         return $this->cache->get(
-            'fichebycategory-'.$id,
+            'fichebycategory-'.$id.time(),
             function (ItemInterface $item) use ($id) {
                 $item->expiresAfter(18000);
                 $url = $this->baseUrl.'/bottin/fiches/category/'.$id;
 
-                return $this->json($this->execute($url));
+                $dataTmp = $this->execute($url);
+                $data = [];
+                foreach ($dataTmp as $fiche) {
+                    $cap = json_decode($this->capApi->find($fiche['id']));
+                    try {
+                        $capFiche = json_decode($this->capApi->commercant($cap->commercantId));
+                    } catch (\Exception $exception) {
+                        $capFiche = [];
+                    }
+                    try {
+                        $images = json_decode($this->capApi->images($cap->commercantId));
+                    } catch (\Exception $exception) {
+                        $images = [];
+                    }
+
+                    $fiche['cap'] = $capFiche;
+                    $fiche['capimages'] = $images;
+                    $data[] = $fiche;
+                }
+
+                return $this->json($data);
             }
         );
     }
@@ -227,15 +249,19 @@ class BottinController extends AbstractController
     #[Route(path: '/bottin/categories/byparent/{id}', name: 'bottin_api_categories_by_parent', methods: ['GET'], format: 'json')]
     public function categoriesByParent(int $id): JsonResponse
     {
-        return $this->cache->get(
-            'categories_by_parent_'.$id,
-            function (ItemInterface $item) use ($id) {
-                $item->expiresAfter(18000);
-                $url = $this->baseUrl.'/bottin/categories/parent/'.$id;
+        if ($id > 0) {
+            return $this->cache->get(
+                'categories_by_parent_'.$id,
+                function (ItemInterface $item) use ($id) {
+                    $item->expiresAfter(18000);
+                    $url = $this->baseUrl.'/bottin/categories/parent/'.$id;
 
-                return $this->json($this->execute($url));
-            }
-        );
+                    return $this->json($this->execute($url));
+                }
+            );
+        }
+
+        return $this->json([]);
     }
 
     private function execute(string $url): array
