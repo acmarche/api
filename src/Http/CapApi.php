@@ -24,7 +24,7 @@ class CapApi
         return $this->executeRequest($url);
     }
 
-    public function commercant(int $commercantId): string
+    public function shop(int $commercantId): string
     {
         $this->connect();
 
