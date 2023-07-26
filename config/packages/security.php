@@ -47,19 +47,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ],
     ];
 
-    $access = [
-        'path' => '^/admin',
-        'roles' => ['ROLE_ADMIN'],
-    ];
-
-  /*  $containerConfigurator->extension(
+    $containerConfigurator->extension(
         'security',
         [
-            'access_control' => [$access],
             'firewalls' => [
-                'api_protect' => $api,
+                //'api_protect' => $api,
                 'main' => $main,
             ],
         ]
-    );*/
+    );
 };
