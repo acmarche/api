@@ -117,9 +117,29 @@ class BottinController extends AbstractController
     #[Route(path: '/bottin/fiche/{id}', name: 'bottin_api_fiche_id', methods: ['GET'], format: 'json')]
     public function ficheById(int $id): JsonResponse
     {
-        $url = $this->baseUrl.'/bottin/fichebyid/'.$id;
+        return $this->cache->get(
+            'fichebyid-'.$id.time(),
+            function (ItemInterface $item) use ($id) {
+                $item->expiresAfter(18000);
+                $url = $this->baseUrl.'/bottin/fichebyid/'.$id;
 
-        return $this->json($this->execute($url));
+                $fiche = $this->execute($url);
+                if(!$fiche) {
+                    return $this->json(null);
+                }
+
+                $cap = json_decode($this->capApi->find($fiche['id']));
+                try {
+                    $capFiche = json_decode($this->capApi->shop($cap->commercantId));
+                } catch (\Exception $exception) {
+                    $capFiche = [];
+                }
+
+                $fiche['cap'] = $capFiche;
+
+                return $this->json($fiche);
+            }
+        );
     }
 
     #[Route(path: '/bottin/fichebyslugname/{slug}', name: 'bottin_api_fiche_slug', methods: ['GET'], format: 'json')]
