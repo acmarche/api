@@ -58,9 +58,11 @@ class Necrologie
         );
 
         $page = 1;
-
-        /* if (isset($_GET['Page']))
-          $page = $_GET['Page']; */
+        /**
+         *
+         * dump($service->__getFunctions());
+         * dump($service->__getTypes());
+         */
 
         $params = array(
             'Interlocuteur' => 22,
