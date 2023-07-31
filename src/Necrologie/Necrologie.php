@@ -44,15 +44,6 @@ class Necrologie
         return $necrologie->get();
     }
 
-    private function getDansNosPensees(): string
-    {
-            return '
-                <h3 class="text-success">
-                <a href="https://www.dansnospensees.be/">
-                https://www.dansnospensees.be/</a>
-                </h3>';
-    }
-
     private function getEnaos()
     {
         $url = "http://webservices.enaos.net/derniersdeces.asmx?WSDL";
@@ -80,7 +71,6 @@ class Necrologie
             'NbreParPage' => 30,
         );
 
-        $titre = '<h3 id="enaos">Source Enaos :</h3>';
         $result = $service->ParCodePostalEnHTMLAvecCtrl($params);
         $content = preg_replace("|#URL-DERNIERS-DECES#|", "", $result->ParCodePostalEnHTMLAvecCtrlResult);
         //http://www.enaos.net/P1220.aspx?IdPer=285754
@@ -94,8 +84,7 @@ class Necrologie
             "table table-hover table-striped table-bordered",
             $content
         );
-        $content = preg_replace("|#URL-ANNONCE#|", "http://www.enaos.net", $content);
 
-        return $titre.$content;
+        return preg_replace("|#URL-ANNONCE#|", "http://www.enaos.net", $content);
     }
 }
