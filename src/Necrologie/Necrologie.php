@@ -20,14 +20,12 @@ class Necrologie
         $necrologie = $this->cache->getItem('necrologie_'.$fullpage);
 
         if (!$necrologie->isHit()) {
-            $pensees = $this->getDansNosPensees();
             $enaos = $this->getEnaos();
 
             if ($fullpage) {
                 $html = $this->environment->render(
                     '@AcMarcheApi/marchebe/deces/necrologie.html.twig',
                     [
-                        'pensees' => $pensees,
                         'enaos' => $enaos,
                     ]
                 );
@@ -35,7 +33,6 @@ class Necrologie
                 $html = $this->environment->render(
                     '@AcMarcheApi/marchebe/deces/_content.html.twig',
                     [
-                        'pensees' => $pensees,
                         'enaos' => $enaos,
                     ]
                 );
