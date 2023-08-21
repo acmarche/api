@@ -96,13 +96,13 @@ class BottinController extends AbstractController
                 }
                 $data = [];
                 foreach ($dataTmp as $fiche) {
-                    $cap = json_decode($this->capApi->find($fiche['id']));
+                   // $cap = json_decode($this->capApi->find($fiche['id']));
                     try {
-                        $capFiche = json_decode($this->capApi->shop($cap->commercantId));
+                     //   $capFiche = json_decode($this->capApi->shop($cap->commercantId));
                     } catch (\Exception $exception) {
                         $capFiche = [];
                     }
-
+$capFiche = [];
                     $fiche['cap'] = $capFiche;
                     $data[] = $fiche;
                 }
