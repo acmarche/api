@@ -77,7 +77,7 @@ class BottinController extends AbstractController
     }
 
     #[Route(path: '/bottin/fiches/rubrique/{id}', name: 'bottin_api_fiche_by_category', methods: ['GET'], format: 'json')]
-    public function ficheByCategory($id): Response
+    public function ficheByCategory($id): JsonResponse
     {
         return $this->cache->get(
             'fichebycategory2-'.$id.$this->cache_prefix.time(),
@@ -113,11 +113,6 @@ class BottinController extends AbstractController
                     $fiche['cap'] = $capFiche;
                     $data[] = $fiche;
                 }
-
-                return $this->render(
-                    '@AcMarcheApi/default/index.html.twig',
-                    $data
-                );
 
                 return $this->json($data);
             }
