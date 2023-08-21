@@ -4,6 +4,7 @@ namespace AcMarche\Api\Controller;
 
 use AcMarche\Api\Http\CapApi;
 use AcMarche\Api\Logger\LoggerDb;
+use AcMarche\Api\Mailer\ApiMailer;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,19 +19,16 @@ use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-/**
- * Old api pour cap
- * Class BottinController
- * @package AcMarche\Api\Controller
- *
- */
 class BottinController extends AbstractController
 {
+    private string $cache_prefix = 'api_cache_';
+
     public function __construct(
         private HttpClientInterface $httpClient,
         private CacheInterface $cache,
         private LoggerDb $loggerDb,
         private LoggerInterface $logger,
+        private ApiMailer $mailer,
         private CapApi $capApi,
         private string $baseUrl
     ) {
@@ -40,7 +38,7 @@ class BottinController extends AbstractController
     public function fiches(): JsonResponse
     {
         return $this->cache->get(
-            'allfiches',
+            'allfiches'.$this->cache_prefix,
             function (ItemInterface $item) {
                 $item->expiresAfter(18000);
                 $url = $this->baseUrl.'/bottin/fiches';
@@ -54,7 +52,7 @@ class BottinController extends AbstractController
     public function fichesAll(): JsonResponse
     {
         return $this->cache->get(
-            'allfichesandroid',
+            'allfichesandroid'.$this->cache_prefix,
             function (ItemInterface $item) {
                 $item->expiresAfter(18000);
                 $url = $this->baseUrl.'/bottin/fichesandroid';
@@ -68,7 +66,7 @@ class BottinController extends AbstractController
     public function commerces(): JsonResponse
     {
         return $this->cache->get(
-            'commerces',
+            'commerces'.$this->cache_prefix,
             function (ItemInterface $item) {
                 $item->expiresAfter(18000);
                 $url = $this->baseUrl.'/bottin/commerces/';
@@ -82,7 +80,7 @@ class BottinController extends AbstractController
     public function ficheByCategory($id): JsonResponse
     {
         return $this->cache->get(
-            'fichebycategory2-'.$id,
+            'fichebycategory2-'.$id.$this->cache_prefix,
             function (ItemInterface $item) use ($id) {
                 $item->expiresAfter(10000);
                 $url = $this->baseUrl.'/bottin/fiches/category/'.$id;
@@ -96,13 +94,14 @@ class BottinController extends AbstractController
                 }
                 $data = [];
                 foreach ($dataTmp as $fiche) {
-                   // $cap = json_decode($this->capApi->find($fiche['id']));
+                    $cap = json_decode($this->capApi->find($fiche['id']));
+                    $capFiche = [];
                     try {
-                     //   $capFiche = json_decode($this->capApi->shop($cap->commercantId));
+                        $capFiche = json_decode($this->capApi->shop($cap->commercantId));
                     } catch (\Exception $exception) {
-                        $capFiche = [];
+                        $this->mailer->sendError($exception->getMessage());
                     }
-$capFiche = [];
+
                     $fiche['cap'] = $capFiche;
                     $data[] = $fiche;
                 }
@@ -127,7 +126,7 @@ $capFiche = [];
     public function ficheById(int $id): JsonResponse
     {
         return $this->cache->get(
-            'fiche-byid-'.$id,
+            'fiche-byid-'.$id.$this->cache_prefix,
             function (ItemInterface $item) use ($id) {
                 $item->expiresAfter(18000);
                 $url = $this->baseUrl.'/bottin/fichebyid/'.$id;
@@ -242,7 +241,7 @@ $capFiche = [];
     public function classements(): JsonResponse
     {
         return $this->cache->get(
-            'classements',
+            'classements'.$this->cache_prefix,
             function (ItemInterface $item) {
                 $item->expiresAfter(18000);
                 $url = $this->baseUrl.'/bottin/classements';
@@ -256,7 +255,7 @@ $capFiche = [];
     public function categories(): JsonResponse
     {
         return $this->cache->get(
-            'categories',
+            'categories'.$this->cache_prefix,
             function (ItemInterface $item) {
                 $item->expiresAfter(18000);
                 $url = $this->baseUrl.'/bottin/categories';
@@ -271,7 +270,7 @@ $capFiche = [];
     {
         if ($id > 0) {
             return $this->cache->get(
-                'categories_by_parent_'.$id,
+                'categories_by_parent_'.$id.$this->cache_prefix,
                 function (ItemInterface $item) use ($id) {
                     $item->expiresAfter(18000);
                     $url = $this->baseUrl.'/bottin/categories/parent/'.$id;
@@ -289,7 +288,7 @@ $capFiche = [];
         try {
             $request = $this->httpClient->request("GET", $url);
         } catch (TransportExceptionInterface $e) {
-               return ['error' => 1, 'message' => 'Error '.$e->getMessage()];
+            return ['error' => 1, 'message' => 'Error '.$e->getMessage()];
         }
         try {
             return json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
