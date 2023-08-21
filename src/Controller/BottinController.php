@@ -21,7 +21,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class BottinController extends AbstractController
 {
-    private string $cache_prefix = 'api_cache_';
+    private string $cache_prefix = 'api_cach2e';
 
     public function __construct(
         private HttpClientInterface $httpClient,
@@ -77,7 +77,7 @@ class BottinController extends AbstractController
     }
 
     #[Route(path: '/bottin/fiches/rubrique/{id}', name: 'bottin_api_fiche_by_category', methods: ['GET'], format: 'json')]
-    public function ficheByCategory($id): JsonResponse
+    public function ficheByCategory($id): Response
     {
         return $this->cache->get(
             'fichebycategory2-'.$id.$this->cache_prefix,
@@ -105,6 +105,11 @@ class BottinController extends AbstractController
                     $fiche['cap'] = $capFiche;
                     $data[] = $fiche;
                 }
+
+                return $this->render(
+                    '@AcMarcheApi/default/index.html.twig',
+                    $data
+                );
 
                 return $this->json($data);
             }
