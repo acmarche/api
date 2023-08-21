@@ -80,7 +80,7 @@ class BottinController extends AbstractController
     public function ficheByCategory($id): JsonResponse
     {
         return $this->cache->get(
-            'fichebycategory2-'.$id.$this->cache_prefix.time(),
+            'fichebycategory2-'.$id.$this->cache_prefix,
             function (ItemInterface $item) use ($id) {
                 $item->expiresAfter(10000);
                 $url = $this->baseUrl.'/bottin/fiches/category/'.$id;
