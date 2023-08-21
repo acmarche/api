@@ -12,6 +12,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -85,6 +88,12 @@ class BottinController extends AbstractController
                 $url = $this->baseUrl.'/bottin/fiches/category/'.$id;
 
                 $dataTmp = $this->execute($url);
+
+                if (isset($dataTmp['error'])) {
+                    if ($dataTmp['error'] == 1) {
+                        return $this->json($dataTmp);
+                    }
+                }
                 $data = [];
                 foreach ($dataTmp as $fiche) {
                     $cap = json_decode($this->capApi->find($fiche['id']));
@@ -118,13 +127,13 @@ class BottinController extends AbstractController
     public function ficheById(int $id): JsonResponse
     {
         return $this->cache->get(
-            'fichebyid-'.$id.time(),
+            'fiche-byid-'.$id,
             function (ItemInterface $item) use ($id) {
                 $item->expiresAfter(18000);
                 $url = $this->baseUrl.'/bottin/fichebyid/'.$id;
 
                 $fiche = $this->execute($url);
-                if(!$fiche) {
+                if (!$fiche) {
                     return $this->json(null);
                 }
 
@@ -177,9 +186,6 @@ class BottinController extends AbstractController
         return new Response($request->getContent());
     }
 
-    /**
-     * @return JsonResponse
-     */
     #[Route(path: '/search/bottin/fiches/_search', name: 'bottin_api_search', methods: ['POST'], format: 'json')]
     public function search(Request $request): Response
     {
@@ -280,13 +286,16 @@ class BottinController extends AbstractController
 
     private function execute(string $url): array
     {
-        $request = $this->httpClient->request("GET", $url);
-        $content = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
-        if (!$content) {
-            return ['error' => 1, 'message' => 'Erreur'];
+        try {
+            $request = $this->httpClient->request("GET", $url);
+        } catch (TransportExceptionInterface $e) {
+               return ['error' => 1, 'message' => 'Error '.$e->getMessage()];
         }
-
-        return $content;
+        try {
+            return json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        } catch (\JsonException|TransportExceptionInterface|ServerExceptionInterface|RedirectionExceptionInterface|ClientExceptionInterface $e) {
+            return ['error' => 1, 'message' => 'Error '.$e->getMessage()];
+        }
     }
 
 }
