@@ -80,7 +80,7 @@ class BottinController extends AbstractController
     public function ficheByCategory($id): Response
     {
         return $this->cache->get(
-            'fichebycategory2-'.$id.$this->cache_prefix,
+            'fichebycategory2-'.$id.$this->cache_prefix.time(),
             function (ItemInterface $item) use ($id) {
                 $item->expiresAfter(10000);
                 $url = $this->baseUrl.'/bottin/fiches/category/'.$id;
@@ -94,12 +94,20 @@ class BottinController extends AbstractController
                 }
                 $data = [];
                 foreach ($dataTmp as $fiche) {
-                    $cap = json_decode($this->capApi->find($fiche['id']));
-                    $capFiche = [];
+                    $cap = null;
                     try {
-                        $capFiche = json_decode($this->capApi->shop($cap->commercantId));
+                        $cap = json_decode($this->capApi->find($fiche['id']));
                     } catch (\Exception $exception) {
                         $this->mailer->sendError($exception->getMessage());
+                    }
+
+                    $capFiche = [];
+                    if ($cap) {
+                        try {
+                            $capFiche = json_decode($this->capApi->shop($cap->commercantId));
+                        } catch (\Exception $exception) {
+                            $this->mailer->sendError($exception->getMessage());
+                        }
                     }
 
                     $fiche['cap'] = $capFiche;
