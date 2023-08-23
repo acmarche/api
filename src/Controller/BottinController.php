@@ -21,7 +21,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class BottinController extends AbstractController
 {
-    private string $cache_prefix = 'api_cach2e';
+    private string $cache_prefix = 'api_cache';
 
     public function __construct(
         private HttpClientInterface $httpClient,
@@ -80,7 +80,7 @@ class BottinController extends AbstractController
     public function ficheByCategory($id): JsonResponse
     {
         return $this->cache->get(
-            'fichebycategory2-'.$id.$this->cache_prefix,
+            'fiche-by-category-'.$id.$this->cache_prefix,
             function (ItemInterface $item) use ($id) {
                 $item->expiresAfter(10000);
                 $url = $this->baseUrl.'/bottin/fiches/category/'.$id;
