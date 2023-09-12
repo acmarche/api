@@ -76,6 +76,34 @@ class BottinController extends AbstractController
         );
     }
 
+    #[Route(path: '/bottin/category-by-slug/{slug}', methods: ['GET'], format: 'json')]
+    public function categoryBySlug(string $slug): JsonResponse
+    {
+        return $this->cache->get(
+            'category-'.$slug.'-'.$this->cache_prefix,
+            function (ItemInterface $item) use ($slug) {
+                $item->expiresAfter(18000);
+                $url = $this->baseUrl.'/bottin/category-by-slug/'.$slug;
+
+                return $this->json($this->execute($url));
+            }
+        );
+    }
+
+    #[Route(path: '/bottin/category/{id}', methods: ['GET'], format: 'json')]
+    public function category(int $id): JsonResponse
+    {
+        return $this->cache->get(
+            'category5-'.$id.'-'.$this->cache_prefix,
+            function (ItemInterface $item) use ($id) {
+                $item->expiresAfter(18000);
+                $url = $this->baseUrl.'/bottin/category/'.$id;
+
+                return $this->json($this->execute($url));
+            }
+        );
+    }
+
     #[Route(path: '/bottin/fiches/rubrique/{id}', name: 'bottin_api_fiche_by_category', methods: ['GET'], format: 'json')]
     public function ficheByCategory($id): JsonResponse
     {
@@ -112,6 +140,177 @@ class BottinController extends AbstractController
 
                     $fiche['cap'] = $capFiche;
                     $data[] = $fiche;
+                }
+
+                return $this->json($data);
+            }
+        );
+    }
+
+    #[Route(path: '/bottin/fiches/cap/rubrique/{id}', methods: ['GET'], format: 'json')]
+    public function fichesCap($id): JsonResponse
+    {
+        return $this->cache->get(
+            'fiche-cap-by-category-'.$id.$this->cache_prefix,
+            function (ItemInterface $item) use ($id) {
+                $item->expiresAfter(10000);
+
+                $url = $this->baseUrl.'/bottin/fiches';
+                if ((int)$id > 0) {
+                    $url = $this->baseUrl.'/bottin/fiches/category/'.$id;
+                }
+
+                $dataTmp = $this->execute($url);
+
+                if (isset($dataTmp['error'])) {
+                    if ($dataTmp['error'] == 1) {
+                        return $this->json($dataTmp);
+                    }
+                }
+                $data = [];
+                $i = 0;
+                foreach ($dataTmp as $fiche) {
+                    if ($i > 50) {
+                        break;
+                    }
+                    $cap = null;
+                    try {
+                        $cap = json_decode($this->capApi->find($fiche['id']));
+                    } catch (\Exception $exception) {
+                        //$this->mailer->sendError($exception->getMessage());
+                    }
+
+                    $capFiche = [];
+                    if ($cap) {
+                        try {
+                            $capFiche = json_decode($this->capApi->shop($cap->commercantId));
+                        } catch (\Exception $exception) {
+                            //  $this->mailer->sendError($exception->getMessage());
+                        }
+                    }
+
+                    $fiche['cap'] = $capFiche;
+                    $data[] = $fiche;
+                    $i++;
+                }
+
+                return $this->json($data);
+            }
+        );
+    }
+
+    #[Route(path: '/bottin/search/cap/rubrique/{id}/{noon}/{sunday}', methods: ['GET'], defaults: [
+        'noon' => false,
+        'sunday' => false,
+    ], format: 'json')]
+    public function searchfichesCap(int $id, $noon, $sunday): JsonResponse
+    {
+        //si false dans url met true :-(
+        if ($noon == "false") {
+            $noon = 0;
+        } else {
+            $noon = 1;
+        }
+        if ($sunday == "false") {
+            $sunday = 0;
+        } else {
+            $sunday = 1;
+        }
+
+        return $this->cache->get(
+            'fiche-cap-by-category-'.$id.$noon.$sunday.$this->cache_prefix,
+            function (ItemInterface $item) use ($id, $noon, $sunday) {
+                $item->expiresAfter(10000);
+
+                $url = $this->baseUrl.'/bottin/fiches';
+                if ($id > 0) {
+                    $url = $this->baseUrl.'/bottin/cap/search/'.$id.'/'.$noon.'/'.$sunday;
+                }
+
+                $dataTmp = $this->execute($url);
+
+                if (isset($dataTmp['error'])) {
+                    if ($dataTmp['error'] == 1) {
+                        return $this->json($dataTmp);
+                    }
+                }
+                $data = [];
+                $i = 0;
+                foreach ($dataTmp as $fiche) {
+                    if ($i > 50) {
+                        break;
+                    }
+                    $cap = null;
+                    try {
+                        $cap = json_decode($this->capApi->find($fiche['id']));
+                    } catch (\Exception $exception) {
+                        //$this->mailer->sendError($exception->getMessage());
+                    }
+
+                    $capFiche = [];
+                    if ($cap) {
+                        try {
+                            $capFiche = json_decode($this->capApi->shop($cap->commercantId));
+                        } catch (\Exception $exception) {
+                            //  $this->mailer->sendError($exception->getMessage());
+                        }
+                    }
+
+                    $fiche['cap'] = $capFiche;
+                    $data[] = $fiche;
+                    $i++;
+                }
+
+                return $this->json($data);
+            }
+        );
+    }
+
+    #[Route(path: '/bottin/fiches/cap/rubrique-by-slug/{slug}', methods: ['GET'], format: 'json')]
+    public function fichesCapSlug(?string $slug): JsonResponse
+    {
+        return $this->cache->get(
+            'fiche-cap-by-category-'.$slug.$this->cache_prefix,
+            function (ItemInterface $item) use ($slug) {
+                $item->expiresAfter(10000);
+
+                $url = $this->baseUrl.'/bottin/fiches';
+                if ($slug) {
+                    $url = $this->baseUrl.'/bottin/fiches/category-by-slug/'.$slug;
+                }
+
+                $dataTmp = $this->execute($url);
+
+                if (isset($dataTmp['error'])) {
+                    if ($dataTmp['error'] == 1) {
+                        return $this->json($dataTmp);
+                    }
+                }
+                $data = [];
+                $i = 0;
+                foreach ($dataTmp as $fiche) {
+                    if ($i > 50) {
+                        break;
+                    }
+                    $cap = null;
+                    try {
+                        $cap = json_decode($this->capApi->find($fiche['id']));
+                    } catch (\Exception $exception) {
+                        //$this->mailer->sendError($exception->getMessage());
+                    }
+
+                    $capFiche = [];
+                    if ($cap) {
+                        try {
+                            $capFiche = json_decode($this->capApi->shop($cap->commercantId));
+                        } catch (\Exception $exception) {
+                            //  $this->mailer->sendError($exception->getMessage());
+                        }
+                    }
+
+                    $fiche['cap'] = $capFiche;
+                    $data[] = $fiche;
+                    $i++;
                 }
 
                 return $this->json($data);
@@ -164,7 +363,25 @@ class BottinController extends AbstractController
         $slug = preg_replace("#\.#", "", $slug);
         $url = $this->baseUrl.'/bottin/fichebyslugname/'.$slug;
 
-        return $this->json($this->execute($url));
+        $fiche = $this->execute($url);
+        if (!$fiche) {
+            return $this->json(null);
+        }
+
+        if (isset($fiche['error'])) {
+            return $this->json(null);
+        }
+
+        $cap = json_decode($this->capApi->find($fiche['id']));
+        try {
+            $capFiche = json_decode($this->capApi->shop($cap->commercantId));
+        } catch (\Exception $exception) {
+            $capFiche = [];
+        }
+
+        $fiche['cap'] = $capFiche;
+
+        return $this->json($fiche);
     }
 
     #[Route(path: '/bottin/fichebyids', name: 'bottin_api_fiche_ids', methods: ['POST'], format: 'json')]
@@ -291,7 +508,7 @@ class BottinController extends AbstractController
         return $this->json([]);
     }
 
-    private function execute(string $url): array
+    private function execute(string $url): ?array
     {
         try {
             $request = $this->httpClient->request("GET", $url);
