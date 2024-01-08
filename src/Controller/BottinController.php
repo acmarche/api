@@ -21,7 +21,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class BottinController extends AbstractController
 {
-    private string $cache_prefix = 'api_cache';
+    private string $cache_prefix = 'api_cache22';
 
     public function __construct(
         private HttpClientInterface $httpClient,
