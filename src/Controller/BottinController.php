@@ -344,10 +344,12 @@ class BottinController extends AbstractController
                 }
 
                 $cap = json_decode($this->capApi->find($fiche['id']));
-                try {
-                    $capFiche = json_decode($this->capApi->shop($cap->commercantId));
-                } catch (\Exception $exception) {
-                    $capFiche = [];
+                if ($cap && $cap->commercantId) {
+                    try {
+                        $capFiche = json_decode($this->capApi->shop($cap->commercantId));
+                    } catch (\Exception $exception) {
+                        $capFiche = [];
+                    }
                 }
 
                 $fiche['cap'] = $capFiche;
@@ -372,11 +374,14 @@ class BottinController extends AbstractController
             return $this->json(null);
         }
 
+        $capFiche = [];
         $cap = json_decode($this->capApi->find($fiche['id']));
-        try {
-            $capFiche = json_decode($this->capApi->shop($cap->commercantId));
-        } catch (\Exception $exception) {
-            $capFiche = [];
+        if ($cap && $cap->commercantId) {
+            try {
+                $capFiche = json_decode($this->capApi->shop($cap->commercantId));
+            } catch (\Exception $exception) {
+
+            }
         }
 
         $fiche['cap'] = $capFiche;
