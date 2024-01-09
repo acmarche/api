@@ -338,8 +338,13 @@ class BottinController extends AbstractController
                 $item->expiresAfter(18000);
                 $url = $this->baseUrl.'/bottin/fichebyid/'.$id;
 
-                $fiche = $this->execute($url);
-                if (!$fiche) {
+                try {
+                    $fiche = $this->execute($url);
+                } catch (\Exception $exception) {
+                    return $this->json(null);
+                }
+
+                if (isset($fiche['error'])) {
                     return $this->json(null);
                 }
 
