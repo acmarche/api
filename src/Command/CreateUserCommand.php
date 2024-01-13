@@ -4,6 +4,7 @@ namespace AcMarche\Api\Command;
 
 use AcMarche\Api\Entity\User;
 use AcMarche\Api\Repository\UserRepository;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -11,10 +12,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
+#[AsCommand(
+    name: 'api:create-user', description: 'Création d\'un utilisateur'
+)]
 class CreateUserCommand extends Command
 {
-    protected static $defaultName = 'api:create-user';
-
     public function __construct(
         private UserRepository $userRepository,
         private UserPasswordHasherInterface $userPasswordEncoder,
@@ -26,7 +28,6 @@ class CreateUserCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Création d\'un utilisateur')
             ->addArgument('name', InputArgument::REQUIRED, 'nom')
             ->addArgument('email', InputArgument::REQUIRED, 'Email')
             ->addArgument('password', InputArgument::REQUIRED, 'Mot de passe');
