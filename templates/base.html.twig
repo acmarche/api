@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>{% block title %}Api{% endblock %}</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('bundles/acmarcheapi/favicon.ico') }}"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
     {% block stylesheets %}
         {{ ux_controller_link_tags() }}
     {% endblock %}
@@ -13,62 +13,73 @@
     {% block javascripts %}
         {% block importmap %}{{ importmap('app') }}{% endblock %}
     {% endblock %}
-   </head>
-<body>
-<nav class="navbar navbar-expand-md navbar-light bg-light fixed-top border-bottom shadow-sm">
-    {% block brand %}
-        <i class="fas fa-store icon-rose"></i> <a class="navbar-brand" href="{{ path('api_home') }}">Api</a>
-    {% endblock %}
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
-            aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+</head>
 
-    <div class="collapse navbar-collapse justify-content-md-center" id="navbarsExampleDefault">
-        <ul class="navbar-nav mr-auto ml-auto">
-            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                {% block menu_top %}
+<body class="d-flex flex-column h-1020" style="height: 100vh;">
+<header class="p-3 mb-3 border-bottom d-print-none">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a href="/" class="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto text-dark text-decoration-none">
+                <i class="ti ti-api icon-rose"></i> <span class="fs-4">Api</span>
+            </a>
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0" id="topmenu">
+                {% block menu %}
                     {% include '@AcMarcheApi/_menu.html.twig' %}
                 {% endblock %}
+            </ul>
+
+            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                <div class="dropdown text-end">
+                    <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32"
+                             class="rounded-circle">
+                        {{ app.user }}
+                    </a>
+                    <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1" style="">
+                        <li><a class="dropdown-item" href="#">New project...</a></li>
+                        <li><a class="dropdown-item" href="#">Settings</a></li>
+                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="{{ path('app_logout') }}">Me déconnecter</a></li>
+                    </ul>
+                </div>
+            {% else %}
+                <a type="button" class="btn btn-outline-primary me-2" href="{{ path('app_login') }}">Me
+                    connecter</a>
             {% endif %}
-        </ul>
-        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a href="{{ path('app_logout') }}" class="nav-link" title="Déconnexion"><i
-                                class="fas fa-sign-out-alt"></i></a>
-                </li>
-            </ul>
-        {% else %}
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a href="{{ path('app_login') }}" class="nav-link" title="Connexion"><i
-                                class="fas fa-sign-in-alt"></i></a>
-                </li>
-            </ul>
-        {% endif %}
+
+        </div>
     </div>
-</nav>
+</header>
 
+<!-- Begin page content -->
+<main class="flex-shrink-0">
+    <div class="container pt-3">
+        {% include '@AcMarcheApi/_flash_messages.html.twig' %}
 
-<main role="main" {% block main_class %}class="container pt-3"{% endblock %}>
+        {% block notifications %}
 
-    {% include '@AcMarcheApi/_flash_messages.html.twig' %}
+        {% endblock %}
 
-    {% block notifications %}
+        {% block body %}
 
-    {% endblock %}
-
-    {% block body %}
-
-    {% endblock %}
+        {% endblock %}
+    </div>
 </main>
 
 {% block footer %}
-    <footer class="mb-5 d-print-none">
-
+    <footer class="footer mt-auto py-3 bg-body-tertiary d-print-none">
+        <div class="container d-flex" style="align-items: center; justify-content: center;">
+            <a href="https://expoactes.monrezo.be/" target="_blank">Api</a>
+        </div>
     </footer>
 {% endblock %}
+
+{% block scripts %}{% endblock %}
 
 </body>
 </html>
