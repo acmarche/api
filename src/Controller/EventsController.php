@@ -13,7 +13,11 @@ class EventsController extends AbstractController
     public function index(): JsonResponse
     {
         $content_json = file_get_contents("https://www.marche.be/api/actus.php");
-        $events = json_decode($content_json, null, 512, JSON_THROW_ON_ERROR);
+        try {
+            $events = json_decode($content_json, null, 512, JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
+            $events = [];
+        }
 
         return new JsonResponse($events);
     }
