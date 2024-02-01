@@ -21,7 +21,12 @@ class MarcheBeController extends AbstractController
     public function index(): JsonResponse
     {
         $content_json = file_get_contents("https://www.marche.be/api/actus.php");
-        $actus = json_decode($content_json, null, 512, JSON_THROW_ON_ERROR);
+        try {
+            $actus = json_decode($content_json, null, 512, JSON_THROW_ON_ERROR);
+        }
+        catch (\Exception $exception){
+             return new JsonResponse([]);
+        }
         $new = array();
         $i = 0;
         foreach ($actus as $post) {
