@@ -11,8 +11,10 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/user')]
+#[IsGranted('ROLE_ADMIN')]
 class UserController extends AbstractController
 {
     public function __construct(private ManagerRegistry $managerRegistry)
