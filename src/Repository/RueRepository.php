@@ -2,6 +2,7 @@
 
 namespace AcMarche\Api\Repository;
 
+use AcMarche\Api\Doctrine\OrmCrudTrait;
 use AcMarche\Api\Entity\Rue;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -14,6 +15,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class RueRepository extends ServiceEntityRepository
 {
+    use OrmCrudTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Rue::class);
