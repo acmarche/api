@@ -4,7 +4,6 @@ namespace AcMarche\Api\Controller;
 
 use AcMarche\Api\Necrologie\Necrologie;
 use DateTime;
-use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -59,8 +58,8 @@ class MarcheBeController extends AbstractController
     }
 
     /**
-     * @return string
-     * @throws InvalidArgumentException
+     * @param bool $fullpage
+     * @return Response
      */
     #[Route(path: '/necrologie/', name: 'necrologie')]
     #[Route(path: '/necrologie/{fullpage}', name: 'necrologie_full')]
