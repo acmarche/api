@@ -21,9 +21,8 @@ class DefaultController extends AbstractController
         private CacheInterface $cache,
         private IcarRepository $icarRepository,
         private RueRepository $rueRepository,
-        private string $baseUrl
-    ) {
-    }
+        private string $baseUrl,
+    ) {}
 
     #[Route(path: '/', name: 'api_home')]
     public function index(): Response
@@ -32,7 +31,7 @@ class DefaultController extends AbstractController
             '@AcMarcheApi/default/index.html.twig',
             [
 
-            ]
+            ],
         );
     }
 
@@ -42,7 +41,7 @@ class DefaultController extends AbstractController
         try {
             $rues = $this->icarRepository->findRuesByLocalite(null);
         } catch (\Exception $e) {
-            $rues =[];
+            return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         $data = [];
@@ -74,7 +73,7 @@ class DefaultController extends AbstractController
                 $url = $this->baseUrl.'/bottin/fiches/category/'.$id;
 
                 return $this->json($this->execute($url));
-            }
+            },
         );
     }
 
@@ -88,7 +87,7 @@ class DefaultController extends AbstractController
                 $url = $this->baseUrl.'/bottin/categoriestree';
 
                 return $this->json($this->execute($url));
-            }
+            },
         );
     }
 
