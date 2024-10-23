@@ -2,8 +2,6 @@
 
 namespace AcMarche\Api\Controller;
 
-use AcMarche\Api\Logger\LoggerDb;
-use AcMarche\Api\Repository\RueRepository;
 use AcMarche\Icar\Repository\IcarRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,12 +13,10 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class DefaultController extends AbstractController
 {
-
     public function __construct(
         private HttpClientInterface $httpClient,
         private CacheInterface $cache,
         private IcarRepository $icarRepository,
-        private RueRepository $rueRepository,
         private string $baseUrl,
     ) {}
 
