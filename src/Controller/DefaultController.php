@@ -4,6 +4,7 @@ namespace AcMarche\Api\Controller;
 
 use AcMarche\Api\Logger\LoggerDb;
 use AcMarche\Api\Repository\RueRepository;
+use AcMarche\Icar\Repository\IcarRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,6 +19,7 @@ class DefaultController extends AbstractController
     public function __construct(
         private HttpClientInterface $httpClient,
         private CacheInterface $cache,
+        private IcarRepository $icarRepository,
         private RueRepository $rueRepository,
         private string $baseUrl
     ) {
@@ -34,18 +36,28 @@ class DefaultController extends AbstractController
         );
     }
 
-
     #[Route(path: '/rues', name: 'rues')]
     public function rues(): JsonResponse
     {
-        $rues = $this->rueRepository->findAll();
+        try {
+            $rues = $this->icarRepository->findRuesByLocalite(null);
+        } catch (\Exception $e) {
+            $rues =[];
+        }
+
         $data = [];
         $i = 0;
-        foreach ($rues as $rue) {
-            $data[$i]['id'] = $rue->getId();
-            $data[$i]['code'] = $rue->getCode();
-            $data[$i]['nom'] = $rue->getNom();
-            $data[$i]['localite'] = $rue->getLocalite();
+
+        foreach ($rues->rues as $rue) {
+            $data[$i]['id'] = $i;
+            $data[$i]['nom'] = $rue->nom;
+            $data[$i]['code_postal'] = $rue->cps[0];
+            $data[$i]['code'] = '';
+            $data[$i]['xMin'] = $rue->xMin;
+            $data[$i]['xMax'] = $rue->xMax;
+            $data[$i]['yMin'] = $rue->yMin;
+            $data[$i]['yMax'] = $rue->yMax;
+            $data[$i]['localites'] = $rue->localites;
             $i++;
         }
 
