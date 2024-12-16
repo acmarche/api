@@ -12,7 +12,7 @@ class EventsController extends AbstractController
     #[Route(path: '/evenements', name: 'events')]
     public function index(): JsonResponse
     {
-        $content_json = file_get_contents("https://www.marche.be/api/actus.php");
+        $content_json = file_get_contents("https://www.marche.be/api/events.php");
         try {
             $events = json_decode($content_json, null, 512, JSON_THROW_ON_ERROR);
         } catch (\JsonException $e) {

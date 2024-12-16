@@ -2,6 +2,7 @@
 
 namespace AcMarche\Api\Controller;
 
+use AcMarche\Api\Parking\CommuniThingsAPI;
 use AcMarche\Icar\Repository\IcarRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -84,6 +85,46 @@ class DefaultController extends AbstractController
 
                 return $this->json($this->execute($url));
             },
+        );
+    }
+
+    #[Route(path: '/parking', name: 'api_parking')]
+    public function parking(): Response
+    {
+        try {
+            $api = new CommuniThingsAPI('https://deploymentURL');
+
+            // Login
+            $token = $api->login('your_email', 'your_password');
+            echo "Token: $token\n";
+
+            // Subscribe to parking events
+            $subscription = $api->subscribe('123', 'http://example.com/callback', 'deploymentName', [
+                'clusters' => true,
+                'heartBeatPeriod' => 10,
+            ]);
+            print_r($subscription);
+
+            // List subscriptions
+            $subscriptions = $api->listSubscriptions('123');
+            print_r($subscriptions);
+
+            // Cancel a subscription
+            $cancelResponse = $api->cancelSubscription('subscriptionID');
+            print_r($cancelResponse);
+
+            // Delete all subscriptions
+            $deleteResponse = $api->deleteAllSubscriptions('123');
+            print_r($deleteResponse);
+        } catch (\Exception $e) {
+            echo 'Error: '.$e->getMessage();
+        }
+
+        return $this->render(
+            '@AcMarcheApi/default/index.html.twig',
+            [
+
+            ],
         );
     }
 

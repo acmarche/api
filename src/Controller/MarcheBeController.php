@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route(path: '/marchebe')]
+#[Route(path: '/')]
 class MarcheBeController extends AbstractController
 {
     public function __construct(private Necrologie $necrologie)
