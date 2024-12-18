@@ -94,13 +94,13 @@ class DefaultController extends AbstractController
     #[Route(path: '/parking', name: 'api_parking')]
     public function parking(Request $request): JsonResponse
     {
-        $data = $request->getContent();
+        $dataRequest = $request->getContent();
         try {
-            $this->apiMailer->sendError($data);
-            $data = json_decode($data, flags: JSON_THROW_ON_ERROR);
+            $this->apiMailer->sendError($dataRequest);
+            $data = json_decode($dataRequest, flags: JSON_THROW_ON_ERROR);
 
             return new JsonResponse($data);
-        } catch (\Exception $e) {
+        } catch (\Exception|\JsonException $e) {
             $this->apiMailer->sendError($e->getMessage());
 
             return new JsonResponse(['error' => 1, 'message' => $e->getMessage(), 'data' => $data],
