@@ -96,7 +96,7 @@ class DefaultController extends AbstractController
     {
         $dataRequest = $request->getContent();
         try {
-            $this->apiMailer->sendError($dataRequest);
+        //    $this->apiMailer->sendError($dataRequest);
             $data = json_decode($dataRequest, flags: JSON_THROW_ON_ERROR);
 
             return new JsonResponse($data);
