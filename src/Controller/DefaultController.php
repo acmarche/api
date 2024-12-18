@@ -97,7 +97,8 @@ class DefaultController extends AbstractController
 
             return new JsonResponse($data);
         } catch (\Exception $e) {
-            return new JsonResponse(['error' => 1, 'message' => $e->getMessage()], Response::HTTP_BAD_REQUEST,
+            return new JsonResponse(['error' => 1, 'message' => $e->getMessage(), 'data' => $data],
+                Response::HTTP_BAD_REQUEST,
             );
         }
     }
