@@ -6,6 +6,7 @@ use AcMarche\Api\Parking\CommuniThingsAPI;
 use AcMarche\Icar\Repository\IcarRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -89,7 +90,19 @@ class DefaultController extends AbstractController
     }
 
     #[Route(path: '/parking', name: 'api_parking')]
-    public function parking(): Response
+    public function parking(Request $request): JsonResponse
+    {
+        try {
+            $data = json_decode($request->getContent(), flags: JSON_THROW_ON_ERROR);
+
+            return new JsonResponse($data);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => 1, 'message' => $e->getMessage()], Response::HTTP_BAD_REQUEST,
+            );
+        }
+    }
+
+    public function parking22(): Response
     {
         try {
             $api = new CommuniThingsAPI('https://deploymentURL');
