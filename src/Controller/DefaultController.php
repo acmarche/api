@@ -16,10 +16,10 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class DefaultController extends AbstractController
 {
     public function __construct(
-        private HttpClientInterface $httpClient,
-        private CacheInterface $cache,
-        private IcarRepository $icarRepository,
-        private string $baseUrl,
+        private readonly HttpClientInterface $httpClient,
+        private readonly CacheInterface $cache,
+        private readonly IcarRepository $icarRepository,
+        private readonly string $baseUrl,
     ) {}
 
     #[Route(path: '/', name: 'api_home')]
@@ -92,8 +92,9 @@ class DefaultController extends AbstractController
     #[Route(path: '/parking', name: 'api_parking')]
     public function parking(Request $request): JsonResponse
     {
+        $data = $request->getContent();
         try {
-            $data = json_decode($request->getContent(), flags: JSON_THROW_ON_ERROR);
+            $data = json_decode($data, flags: JSON_THROW_ON_ERROR);
 
             return new JsonResponse($data);
         } catch (\Exception $e) {

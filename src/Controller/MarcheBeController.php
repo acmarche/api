@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route(path: '/')]
 class MarcheBeController extends AbstractController
 {
-    public function __construct(private Necrologie $necrologie)
+    public function __construct(private readonly Necrologie $necrologie)
     {
     }
 
@@ -57,12 +57,8 @@ class MarcheBeController extends AbstractController
         return new JsonResponse($new);
     }
 
-    /**
-     * @param bool $fullpage
-     * @return Response
-     */
-    #[Route(path: '/necrologie/', name: 'necrologie')]
-    #[Route(path: '/necrologie/{fullpage}', name: 'necrologie_full')]
+    #[Route(path: '/marchebe/necrologie/', name: 'necrologie')]
+    #[Route(path: '/marchebe/necrologie/{fullpage}', name: 'necrologie_full')]
     public function getNecrologie(bool $fullpage = false): Response
     {
         return new Response($this->necrologie->getNecro($fullpage));
