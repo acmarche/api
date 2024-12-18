@@ -2,6 +2,7 @@
 
 namespace AcMarche\Api\Controller;
 
+use AcMarche\Api\Mailer\ApiMailer;
 use AcMarche\Api\Parking\CommuniThingsAPI;
 use AcMarche\Icar\Repository\IcarRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,6 +20,7 @@ class DefaultController extends AbstractController
         private readonly HttpClientInterface $httpClient,
         private readonly CacheInterface $cache,
         private readonly IcarRepository $icarRepository,
+        private readonly ApiMailer $apiMailer,
         private readonly string $baseUrl,
     ) {}
 
@@ -94,10 +96,13 @@ class DefaultController extends AbstractController
     {
         $data = $request->getContent();
         try {
+            $this->apiMailer->sendError($data);
             $data = json_decode($data, flags: JSON_THROW_ON_ERROR);
 
             return new JsonResponse($data);
         } catch (\Exception $e) {
+            $this->apiMailer->sendError($e->getMessage());
+
             return new JsonResponse(['error' => 1, 'message' => $e->getMessage(), 'data' => $data],
                 Response::HTTP_BAD_REQUEST,
             );
