@@ -148,7 +148,7 @@ class DefaultController extends AbstractController
                     position: new Point($parking->latitude, $parking->longitude),
                     title: $parking->name,
                     infoWindow: new InfoWindow(
-                        content: '<p>'.$parking->description.'</p>'.$parking->status,
+                        content: '<p>'.$parking->name.'</p>'.$parking->status,
                     ),
                 ),
             );

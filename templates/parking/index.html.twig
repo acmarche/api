@@ -11,7 +11,7 @@
             <th>Statut</th>
             <th>Mis à jour le</th>
             <th>Type</th>
-            <th>Site</th>
+            <th>Lieu</th>
         </tr>
         {% for parking in parkings %}
             <tr>
@@ -19,7 +19,7 @@
                 <td>{{ parking.status }}</td>
                 <td>{{ parking.status_date|format_datetime('full','medium') }}</td>
                 <td>{{ parking.category[1] }}</td>
-                <td>{{ parking.refParkingSite }}</td>
+                <td>{{ parking.refParkingGroup }}</td>
             </tr>
         {% endfor %}
     </table>
