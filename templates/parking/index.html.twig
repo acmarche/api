@@ -3,11 +3,24 @@
 {% block body %}
 
     <h1 class="text-success">Carto parkings</h1>
-
-        {# The map must have a defined height #}
-        {{ ux_map(map, {style: 'height: 600px;'}) }}
-
-    {% for parking in parkings %}
-
-    {% endfor %}
+    {{ ux_map(map, {style: 'height: 600px;'}) }}
+    <h3 class="text-success my-3">{{ parkings|length }} parkings</h3>
+    <table class="table table-bordered">
+        <tr>
+            <th>Nom</th>
+            <th>Statut</th>
+            <th>Mis à jour le</th>
+            <th>Type</th>
+            <th>Site</th>
+        </tr>
+        {% for parking in parkings %}
+            <tr>
+                <td>{{ parking.name }}</td>
+                <td>{{ parking.status }}</td>
+                <td>{{ parking.status_date|format_datetime('full','medium') }}</td>
+                <td>{{ parking.category[1] }}</td>
+                <td>{{ parking.refParkingSite }}</td>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}
