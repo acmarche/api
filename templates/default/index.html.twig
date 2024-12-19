@@ -12,12 +12,12 @@
         </li>
         <li class="list-group-item"><a href="{{ path('events') }}">Events</a></li>
         <li class="list-group-item"><a href="{{ path('rues') }}">Rues</a></li>
+        <li class="list-group-item">
+            <a href="{{ path('api_parking_map') }}">Parkings</a>
+        </li>
     </ul>
     {% if is_granted('ROLE_ADMIN') %}
         <ul class="list-group">
-            <li class="list-group-item">
-                <a href="{{ path('api_parking_map') }}">Parkings</a>
-            </li>
             <li class="list-group-item">
                 <a href="{{ path('bottin_api_fiches') }}">Fiches</a>
             </li>
