@@ -15,6 +15,12 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\UX\Map\Bridge\Leaflet\LeafletOptions;
+use Symfony\UX\Map\Bridge\Leaflet\Option\TileLayer;
+use Symfony\UX\Map\InfoWindow;
+use Symfony\UX\Map\Map;
+use Symfony\UX\Map\Marker;
+use Symfony\UX\Map\Point;
 
 class DefaultController extends AbstractController
 {
@@ -116,6 +122,42 @@ class DefaultController extends AbstractController
                 Response::HTTP_BAD_REQUEST,
             );
         }
+    }
+
+    #[Route(path: '/map/parking', name: 'api_parking_map')]
+    public function parkingMap(): Response
+    {
+        $parkings = $this->parkingRepository->findAll();
+        $map = (new Map('default'))
+            ->center(new Point( 50.2292919,5.34407543,))
+            ->zoom(13)
+            ->options(
+                (new LeafletOptions())
+                    ->tileLayer(
+                        new TileLayer(
+                            url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                            options: ['maxZoom' => 19],
+                        ),
+                    ),
+            );
+
+        foreach ($parkings as $parking) {
+            $map->addMarker(
+                new Marker(
+                    position: new Point($parking->latitude, $parking->longitude),
+                    title: $parking->name,
+                    infoWindow: new InfoWindow(
+                        content: '<p>'.$parking->description.'</p>',
+                    ),
+                ),
+            );
+        }
+
+        return $this->render('@AcMarcheApi/parking/index.html.twig', [
+            'map' => $map,
+            'parkings' => $parkings,
+        ]);
     }
 
     private function execute(string $url): array

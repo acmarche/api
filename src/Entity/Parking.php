@@ -44,8 +44,8 @@ class Parking
         $parking->type = $eventNotification->data->type;
         $parking->category = $eventNotification->data->category->value;
         $parking->description = $eventNotification->data->description->value;
-        $parking->latitude = $eventNotification->data->location->value['coordinates'][0];
-        $parking->longitude = $eventNotification->data->location->value['coordinates'][1];
+        $parking->longitude = $eventNotification->data->location->value['coordinates'][0];
+        $parking->latitude = $eventNotification->data->location->value['coordinates'][1];
         $parking->status = $eventNotification->data->status->value;
         try {
             $date = Carbon::create($eventNotification->data->status->metadata['timestamp']['value'])->toDateTime();
