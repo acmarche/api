@@ -100,11 +100,10 @@ class DefaultController extends AbstractController
         );
     }
 
-    #[Route(path: '/parking')]
-    public function parkingApi(Request $request): JsonResponse
+    #[Route(path: '/parking', methods: ['POST'])]
+    public function parking(Request $request): JsonResponse
     {
         $jsonString = $request->getContent();
-            $this->apiMailer->sendError('error:'.$request->getMethod());
         try {
             $eventNotification = new EventNotification($jsonString);
             if (!$parking = $this->parkingRepository->findByNumber($eventNotification->data->id)) {
