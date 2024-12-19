@@ -2,8 +2,10 @@
 
 namespace AcMarche\Api\Controller;
 
+use AcMarche\Api\Entity\Parking;
 use AcMarche\Api\Mailer\ApiMailer;
-use AcMarche\Api\Parking\CommuniThingsAPI;
+use AcMarche\Api\Parking\EventNotification;
+use AcMarche\Api\Parking\Repository\ParkingRepository;
 use AcMarche\Icar\Repository\IcarRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -20,6 +22,7 @@ class DefaultController extends AbstractController
         private readonly HttpClientInterface $httpClient,
         private readonly CacheInterface $cache,
         private readonly IcarRepository $icarRepository,
+        private readonly ParkingRepository $parkingRepository,
         private readonly ApiMailer $apiMailer,
         private readonly string $baseUrl,
     ) {}
@@ -94,58 +97,25 @@ class DefaultController extends AbstractController
     #[Route(path: '/parking', name: 'api_parking')]
     public function parking(Request $request): JsonResponse
     {
-        $dataRequest = $request->getContent();
+        $jsonString = $request->getContent();
         try {
-        //    $this->apiMailer->sendError($dataRequest);
-            $data = json_decode($dataRequest, flags: JSON_THROW_ON_ERROR);
+            $eventNotification = new EventNotification($jsonString);
+            if (!$parking = $this->parkingRepository->findByNumber($eventNotification->data->id)) {
+                $parking = Parking::createFromEvent($eventNotification);
+                $this->parkingRepository->insert($parking);
+            } else {
+                $parking->update($eventNotification);
+                $this->parkingRepository->flush();
+            }
 
-            return new JsonResponse($data);
-        } catch (\Exception|\JsonException $e) {
+            return new JsonResponse($parking);
+        } catch (\Exception $e) {
             $this->apiMailer->sendError($e->getMessage());
 
-            return new JsonResponse(['error' => 1, 'message' => $e->getMessage(), 'data' => $data],
+            return new JsonResponse(['error' => 1, 'message' => $e->getMessage(), 'data' => $jsonString],
                 Response::HTTP_BAD_REQUEST,
             );
         }
-    }
-
-    public function parking22(): Response
-    {
-        try {
-            $api = new CommuniThingsAPI('https://deploymentURL');
-
-            // Login
-            $token = $api->login('your_email', 'your_password');
-            echo "Token: $token\n";
-
-            // Subscribe to parking events
-            $subscription = $api->subscribe('123', 'http://example.com/callback', 'deploymentName', [
-                'clusters' => true,
-                'heartBeatPeriod' => 10,
-            ]);
-            print_r($subscription);
-
-            // List subscriptions
-            $subscriptions = $api->listSubscriptions('123');
-            print_r($subscriptions);
-
-            // Cancel a subscription
-            $cancelResponse = $api->cancelSubscription('subscriptionID');
-            print_r($cancelResponse);
-
-            // Delete all subscriptions
-            $deleteResponse = $api->deleteAllSubscriptions('123');
-            print_r($deleteResponse);
-        } catch (\Exception $e) {
-            echo 'Error: '.$e->getMessage();
-        }
-
-        return $this->render(
-            '@AcMarcheApi/default/index.html.twig',
-            [
-
-            ],
-        );
     }
 
     private function execute(string $url): array
