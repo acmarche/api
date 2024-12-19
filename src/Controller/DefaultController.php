@@ -100,8 +100,8 @@ class DefaultController extends AbstractController
         );
     }
 
-    #[Route(path: '/parking', name: 'api_parking')]
-    public function parking(Request $request): JsonResponse
+    #[Route(path: '/parking', methods: ['POST'])]
+    public function parkingApi(Request $request): JsonResponse
     {
         $jsonString = $request->getContent();
         try {
@@ -124,13 +124,19 @@ class DefaultController extends AbstractController
         }
     }
 
+    #[Route(path: '/parkings/json', name: 'api_parking_json', methods: ['GET'])]
+    public function parkingJson(): JsonResponse
+    {
+        return $this->json($this->parkingRepository->findAll());
+    }
+
     #[Route(path: '/map/parking', name: 'api_parking_map')]
     public function parkingMap(): Response
     {
         $parkings = $this->parkingRepository->findAll();
         $map = (new Map('default'))
             ->center(new Point(50.2292919, 5.34407543,))
-            ->zoom(13)
+            ->zoom(14)
             ->options(
                 (new LeafletOptions())
                     ->tileLayer(
@@ -147,9 +153,10 @@ class DefaultController extends AbstractController
                 new Marker(
                     position: new Point($parking->latitude, $parking->longitude),
                     title: $parking->name,
-                    infoWindow: new InfoWindow(
-                        content: '<p>'.$parking->name.'</p>'.$parking->status,
-                    ),
+                    infoWindow: new InfoWindow(content: '<p>'.$parking->name.'</p>'.$parking->status),
+                    extra: [
+                        /// 'icon_url' => 'https://maps.gstatic.com/mapfiles/place_api/icons/v2/tree_pinlet.svg',
+                    ],
                 ),
             );
         }
