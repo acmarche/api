@@ -98,6 +98,7 @@ class DefaultController extends AbstractController
     public function parking(Request $request): JsonResponse
     {
         $jsonString = $request->getContent();
+            $this->apiMailer->sendError($jsonString);
         try {
             $eventNotification = new EventNotification($jsonString);
             if (!$parking = $this->parkingRepository->findByNumber($eventNotification->data->id)) {
