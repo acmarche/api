@@ -129,7 +129,7 @@ class DefaultController extends AbstractController
     {
         $parkings = $this->parkingRepository->findAll();
         $map = (new Map('default'))
-            ->center(new Point( 50.2292919,5.34407543,))
+            ->center(new Point(50.2292919, 5.34407543,))
             ->zoom(13)
             ->options(
                 (new LeafletOptions())
@@ -148,7 +148,7 @@ class DefaultController extends AbstractController
                     position: new Point($parking->latitude, $parking->longitude),
                     title: $parking->name,
                     infoWindow: new InfoWindow(
-                        content: '<p>'.$parking->description.'</p>',
+                        content: '<p>'.$parking->description.'</p>'.$parking->status,
                     ),
                 ),
             );
