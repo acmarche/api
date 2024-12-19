@@ -110,7 +110,7 @@ class DefaultController extends AbstractController
 
             return new JsonResponse($parking);
         } catch (\Exception $e) {
-            $this->apiMailer->sendError($e->getMessage().' => '.$jsonString);
+            $this->apiMailer->sendError('error:'.$e->getMessage().' => '.$jsonString);
 
             return new JsonResponse(['error' => 1, 'message' => $e->getMessage(), 'data' => $jsonString],
                 Response::HTTP_BAD_REQUEST,
