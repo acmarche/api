@@ -98,7 +98,6 @@ class DefaultController extends AbstractController
     public function parking(Request $request): JsonResponse
     {
         $jsonString = $request->getContent();
-            $this->apiMailer->sendError($jsonString);
         try {
             $eventNotification = new EventNotification($jsonString);
             if (!$parking = $this->parkingRepository->findByNumber($eventNotification->data->id)) {
@@ -111,7 +110,7 @@ class DefaultController extends AbstractController
 
             return new JsonResponse($parking);
         } catch (\Exception $e) {
-            $this->apiMailer->sendError($e->getMessage());
+            $this->apiMailer->sendError($e->getMessage().' => '.$jsonString);
 
             return new JsonResponse(['error' => 1, 'message' => $e->getMessage(), 'data' => $jsonString],
                 Response::HTTP_BAD_REQUEST,
