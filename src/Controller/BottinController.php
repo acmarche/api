@@ -349,11 +349,12 @@ class BottinController extends AbstractController
                 }
 
                 $cap = json_decode($this->capApi->find($fiche['id']));
+                $capFiche = [];
                 if ($cap && $cap->commercantId) {
                     try {
                         $capFiche = json_decode($this->capApi->shop($cap->commercantId));
                     } catch (\Exception $exception) {
-                        $capFiche = [];
+
                     }
                 }
 
