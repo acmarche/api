@@ -1,0 +1,20 @@
+<a href="{{ path('api_user_index') }}" class="btn btn-primary" role='button'><i class="ti ti-list"></i>
+    Retour à la liste
+</a>
+
+<a href="{{ path('api_user_edit', { 'id': user.id }) }}" role="button"
+   class="btn btn-primary"><i class="ti ti-edit"></i> Editer</a>
+
+<a href="{{ path('api_user_password', { 'id': user.id }) }}" role="button"
+   class="btn btn-primary"><i class="ti ti-lock"></i> Mot de passe</a>
+
+<a href="{{ path('api_token_generate', { 'id': user.id }) }}" role="button"
+   class="btn btn-primary"><i class="ti ti-lock"></i> Token</a>
+
+<button class="btn btn-danger" role='button' data-toggle="modal" data-target="#deleteModal"><i
+            class="ti ti-trash"></i>
+    Supprimer
+</button>
+
+<br/>
+<br/>

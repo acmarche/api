@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-#[IsGranted('ROLE_ADMIN')]
+#[IsGranted('ROLE_API_ADMIN')]
 class TestController extends AbstractController
 {
     public function __construct(

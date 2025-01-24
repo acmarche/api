@@ -63,7 +63,7 @@ class CreateUserCommand extends Command
         $user->setEmail($email);
         $user->setNom($name);
         $user->setPassword($this->userPasswordEncoder->hashPassword($user, $password));
-        $user->addRole('ROLE_ADMIN');
+        $user->addRole('ROLE_API_ADMIN');
 
         $this->userRepository->persist($user);
         $this->userRepository->flush();

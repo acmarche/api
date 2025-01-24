@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/token')]
-#[IsGranted('ROLE_ADMIN')]
+#[IsGranted('ROLE_API_ADMIN')]
 class TokenController extends AbstractController
 {
     public function __construct(
