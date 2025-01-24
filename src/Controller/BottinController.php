@@ -7,6 +7,7 @@ use AcMarche\Api\Logger\LoggerDb;
 use AcMarche\Api\Mailer\ApiMailer;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,15 +25,15 @@ class BottinController extends AbstractController
     private string $cache_prefix = 'api_cache22';
 
     public function __construct(
-        private HttpClientInterface $httpClient,
-        private CacheInterface $cache,
-        private LoggerDb $loggerDb,
-        private LoggerInterface $logger,
-        private ApiMailer $mailer,
-        private CapApi $capApi,
-        private string $baseUrl
-    ) {
-    }
+        #[Autowire(env: 'BOTTIN_URL')]
+        private readonly string $baseUrl,
+        private readonly HttpClientInterface $httpClient,
+        private readonly CacheInterface $cache,
+        private readonly LoggerDb $loggerDb,
+        private readonly LoggerInterface $logger,
+        private readonly ApiMailer $mailer,
+        private readonly CapApi $capApi,
+    ) {}
 
     #[Route(path: '/bottin/fiches', name: 'bottin_api_fiches', methods: ['GET'], format: 'json')]
     public function fiches(): JsonResponse
@@ -44,7 +45,7 @@ class BottinController extends AbstractController
                 $url = $this->baseUrl.'/bottin/fiches';
 
                 return $this->json($this->execute($url));
-            }
+            },
         );
     }
 
@@ -58,7 +59,7 @@ class BottinController extends AbstractController
                 $url = $this->baseUrl.'/bottin/fichesandroid';
 
                 return $this->json($this->execute($url));
-            }
+            },
         );
     }
 
@@ -72,7 +73,7 @@ class BottinController extends AbstractController
                 $url = $this->baseUrl.'/bottin/commerces/';
 
                 return $this->json($this->execute($url));
-            }
+            },
         );
     }
 
@@ -86,7 +87,7 @@ class BottinController extends AbstractController
                 $url = $this->baseUrl.'/bottin/category-by-slug/'.$slug;
 
                 return $this->json($this->execute($url));
-            }
+            },
         );
     }
 
@@ -100,7 +101,7 @@ class BottinController extends AbstractController
                 $url = $this->baseUrl.'/bottin/category/'.$id;
 
                 return $this->json($this->execute($url));
-            }
+            },
         );
     }
 
@@ -143,7 +144,7 @@ class BottinController extends AbstractController
                 }
 
                 return $this->json($data);
-            }
+            },
         );
     }
 
@@ -195,14 +196,14 @@ class BottinController extends AbstractController
                 }
 
                 return $this->json($data);
-            }
+            },
         );
     }
 
-    #[Route(path: '/bottin/search/cap/rubrique/{id}/{noon}/{sunday}', methods: ['GET'], defaults: [
+    #[Route(path: '/bottin/search/cap/rubrique/{id}/{noon}/{sunday}', defaults: [
         'noon' => false,
         'sunday' => false,
-    ], format: 'json')]
+    ], methods: ['GET'], format: 'json')]
     public function searchfichesCap(int $id, $noon, $sunday): JsonResponse
     {
         //si false dans url met true :-(
@@ -262,7 +263,7 @@ class BottinController extends AbstractController
                 }
 
                 return $this->json($data);
-            }
+            },
         );
     }
 
@@ -314,7 +315,7 @@ class BottinController extends AbstractController
                 }
 
                 return $this->json($data);
-            }
+            },
         );
     }
 
@@ -354,14 +355,13 @@ class BottinController extends AbstractController
                     try {
                         $capFiche = json_decode($this->capApi->shop($cap->commercantId));
                     } catch (\Exception $exception) {
-
                     }
                 }
 
                 $fiche['cap'] = $capFiche;
 
                 return $this->json($fiche);
-            }
+            },
         );
     }
 
@@ -386,7 +386,6 @@ class BottinController extends AbstractController
             try {
                 $capFiche = json_decode($this->capApi->shop($cap->commercantId));
             } catch (\Exception $exception) {
-
             }
         }
 
@@ -415,7 +414,7 @@ class BottinController extends AbstractController
             $url,
             [
                 'body' => $fields,
-            ]
+            ],
         );
 
         return new Response($request->getContent());
@@ -436,7 +435,7 @@ class BottinController extends AbstractController
             $url,
             [
                 'body' => ['keyword' => $keyword],
-            ]
+            ],
         );
         $content = $request->getContent();
         $this->loggerDb->logSearch($keyword);
@@ -460,7 +459,7 @@ class BottinController extends AbstractController
                 $url,
                 [
                     'body' => $fields,
-                ]
+                ],
             );
         } catch (TransportExceptionInterface $e) {
             $this->logger->critical('##api## error api update fiche '.$e->getMessage());
@@ -483,7 +482,7 @@ class BottinController extends AbstractController
                 $url = $this->baseUrl.'/bottin/classements';
 
                 return $this->json($this->execute($url));
-            }
+            },
         );
     }
 
@@ -497,7 +496,7 @@ class BottinController extends AbstractController
                 $url = $this->baseUrl.'/bottin/categories';
 
                 return $this->json($this->execute($url));
-            }
+            },
         );
     }
 
@@ -512,7 +511,7 @@ class BottinController extends AbstractController
                     $url = $this->baseUrl.'/bottin/categories/parent/'.$id;
 
                     return $this->json($this->execute($url));
-                }
+                },
             );
         }
 

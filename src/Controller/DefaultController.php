@@ -7,7 +7,9 @@ use AcMarche\Api\Mailer\ApiMailer;
 use AcMarche\Api\Parking\EventNotification;
 use AcMarche\Api\Parking\Repository\ParkingRepository;
 use AcMarche\Icar\Repository\IcarRepository;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,12 +27,14 @@ use Symfony\UX\Map\Point;
 class DefaultController extends AbstractController
 {
     public function __construct(
+        #[Autowire(env: 'BOTTIN_URL')]
+        private readonly string $baseUrl,
         private readonly HttpClientInterface $httpClient,
         private readonly CacheInterface $cache,
         private readonly IcarRepository $icarRepository,
         private readonly ParkingRepository $parkingRepository,
         private readonly ApiMailer $apiMailer,
-        private readonly string $baseUrl,
+        private readonly LoggerInterface $logger
     ) {}
 
     #[Route(path: '/', name: 'api_home')]
@@ -104,6 +108,7 @@ class DefaultController extends AbstractController
     public function parking(Request $request): JsonResponse
     {
         $jsonString = $request->getContent();
+        $this->logger->warning("ZEZE ".$jsonString);
         try {
             $eventNotification = new EventNotification($jsonString);
             if (!$parking = $this->parkingRepository->findByNumber($eventNotification->data->id)) {
@@ -155,7 +160,7 @@ class DefaultController extends AbstractController
                     title: $parking->name,
                     infoWindow: new InfoWindow(content: '<p>'.$parking->name.'</p>'.$parking->status),
                     extra: [
-                        /// 'icon_url' => 'https://maps.gstatic.com/mapfiles/place_api/icons/v2/tree_pinlet.svg',
+                         'icon_url' => 'https://maps.gstatic.com/mapfiles/place_api/icons/v2/tree_pinlet.svg',
                     ],
                 ),
             );

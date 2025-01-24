@@ -4,6 +4,7 @@
 namespace AcMarche\Api\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -12,9 +13,11 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 #[IsGranted('ROLE_ADMIN')]
 class TestController extends AbstractController
 {
-    public function __construct(private HttpClientInterface $httpClient, private string $baseUrl)
-    {
-    }
+    public function __construct(
+        private HttpClientInterface $httpClient,
+        #[Autowire(env: 'BOTTIN_URL')]
+        private readonly string $baseUrl,
+    ) {}
 
     #[Route(path: '/bottin/test/ids', name: 'bottin_test_ids')]
     public function testIDs(): Response
@@ -27,7 +30,7 @@ class TestController extends AbstractController
             $url,
             [
                 'body' => $fields,
-            ]
+            ],
         );
 
         return new Response($request->getContent());
@@ -36,14 +39,14 @@ class TestController extends AbstractController
     #[Route(path: '/bottin/test/updatefiche', name: 'bottin_test_updatefiche')]
     public function testPostFiche(): Response
     {
-        $fields = array('id' => 393, 'fax' => '084 12 34 56', 'gsm' => '0476 12 34 56');
+        $fields = ['id' => 393, 'fax' => '084 12 34 56', 'gsm' => '0476 12 34 56'];
         $url = $this->baseUrl.'/updatefiche';
         $request = $this->httpClient->request(
             "POST",
             $url,
             [
                 'body' => $fields,
-            ]
+            ],
         );
 
         return new Response($request->getContent());
@@ -59,7 +62,7 @@ class TestController extends AbstractController
             $url,
             [
                 'body' => $data,
-            ]
+            ],
         );
 
         return new Response($request->getContent());

@@ -13,8 +13,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->defaults()
         ->autowire()
         ->autoconfigure()
-        ->private()
-        ->bind('$baseUrl', '%env(BOTTIN_URL)%');
+        ->private();
 
     $services->load('AcMarche\Api\\', __DIR__.'/../src/*')
         ->exclude([__DIR__.'/../src/{Entity,Tests}']);
