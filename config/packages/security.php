@@ -1,59 +1,58 @@
 <?php
 
-
 use AcMarche\Api\Entity\User;
+use AcMarche\Api\Security\AccessTokenHandler;
 use AcMarche\Api\Security\ApiAuthenticator;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symfony\Config\SecurityConfig;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $containerConfigurator->extension('security', [
-        'password_hashers' => [
-            User::class => ['algorithm' => 'auto'],
-        ],
-    ]);
+return static function (SecurityConfig $security): void {
+    $security
+        ->provider('api_user_provider')
+        ->entity()
+        ->class(User::class)
+        ->managerName('default')
+        ->property('username');
 
-    $containerConfigurator->extension(
-        'security',
-        [
-            'providers' => [
-                'api_user_provider' => [
-                    'entity' => [
-                        'class' => User::class,
-                        'property' => 'username',
-                    ],
-                ],
-            ],
-        ]
-    );
+    $security
+        ->firewall('dev')
+        ->pattern('^/(_(profiler|wdt)|css|images|js)/')
+        ->security(false);
+
+    $mainFirewall = $security
+        ->firewall('main')
+        ->lazy(true)
+        ->pattern('/secure');
+
+    $mainFirewall
+        ->logout()
+        ->path('app_logout');
+
+    $mainFirewall
+        ->formLogin()
+        ->loginPath('app_login')
+        ->checkPath('app_login')
+        ->rememberMe(true)
+        ->enableCsrf(true);
 
     $authenticators = [ApiAuthenticator::class];
 
-    $main = [
-        'lazy' => true,
-        'provider' => 'api_user_provider',
-        'logout' => ['path' => 'app_logout'],
-        'form_login' => [],
-        'entry_point' => ApiAuthenticator::class,
-    ];
+    $mainFirewall
+        ->customAuthenticators($authenticators)
+        ->provider('api_user_provider')
+        ->entryPoint(ApiAuthenticator::class)
+        ->loginThrottling()
+        ->maxAttempts(6)
+        ->interval('15 minutes');
 
-    $main['custom_authenticator'] = $authenticators;
+    $mainFirewall
+        ->rememberMe([
+            'secret' => '%kernel.secret%',
+            'lifetime' => 604800,
+            'path' => '/',
+            'always_remember_me' => true,
+        ]);
 
-    $api = [
-        'pattern' =>
-            '^/bottin',
-        'http_basic' => [
-            'realm' => 'Secured Area',
-            'provider' => 'api_user_provider',
-        ],
-    ];
-
-    $containerConfigurator->extension(
-        'security',
-        [
-            'firewalls' => [
-                //'api_protect' => $api,
-                'main' => $main,
-            ],
-        ]
-    );
+    $mainFirewall
+        ->accessToken()
+        ->tokenHandler(AccessTokenHandler::class);
 };

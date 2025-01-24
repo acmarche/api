@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -34,7 +35,7 @@ class DefaultController extends AbstractController
         private readonly IcarRepository $icarRepository,
         private readonly ParkingRepository $parkingRepository,
         private readonly ApiMailer $apiMailer,
-        private readonly LoggerInterface $logger
+        private readonly LoggerInterface $logger,
     ) {}
 
     #[Route(path: '/', name: 'api_home')]
@@ -129,13 +130,14 @@ class DefaultController extends AbstractController
         }
     }
 
-    #[Route(path: '/parkings/json', name: 'api_parking_json', methods: ['GET'])]
+    #[Route(path: '/secure/parking/json', name: 'api_parking_json', methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
     public function parkingJson(): JsonResponse
     {
         return $this->json($this->parkingRepository->findAll());
     }
 
-    #[Route(path: '/map/parking', name: 'api_parking_map')]
+    #[Route(path: '/parking', name: 'api_parking_map')]
     public function parkingMap(): Response
     {
         $parkings = $this->parkingRepository->findAll();
@@ -160,7 +162,7 @@ class DefaultController extends AbstractController
                     title: $parking->name,
                     infoWindow: new InfoWindow(content: '<p>'.$parking->name.'</p>'.$parking->status),
                     extra: [
-                         'icon_url' => 'https://maps.gstatic.com/mapfiles/place_api/icons/v2/tree_pinlet.svg',
+                        'icon_url' => 'https://maps.gstatic.com/mapfiles/place_api/icons/v2/tree_pinlet.svg',
                     ],
                 ),
             );

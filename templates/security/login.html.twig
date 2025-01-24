@@ -21,10 +21,8 @@
                    class="sr-only">Mot de passe</label>
             <input name="password" type="password" id="inputPassword" class="form-control"
                    placeholder="Mot de passe" required>
-
-            <input type="hidden" name="_csrf_token"
-                   value="{{ csrf_token('authenticate') }}"
-            >
+            <input type="hidden" name="_csrf_token" data-controller="csrf-protection"
+                   value="{{ csrf_token('authenticate') }}">
             <button class="btn btn-lg btn-primary btn-block"
                     type="submit"><i class="fas fa-sign-in-alt"></i> Me connecter
             </button>
