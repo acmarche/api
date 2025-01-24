@@ -7,7 +7,6 @@ use AcMarche\Api\Mailer\ApiMailer;
 use AcMarche\Api\Parking\EventNotification;
 use AcMarche\Api\Parking\Repository\ParkingRepository;
 use AcMarche\Icar\Repository\IcarRepository;
-use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -35,7 +34,6 @@ class DefaultController extends AbstractController
         private readonly IcarRepository $icarRepository,
         private readonly ParkingRepository $parkingRepository,
         private readonly ApiMailer $apiMailer,
-        private readonly LoggerInterface $logger,
     ) {}
 
     #[Route(path: '/', name: 'api_home')]
@@ -109,7 +107,6 @@ class DefaultController extends AbstractController
     public function parking(Request $request): JsonResponse
     {
         $jsonString = $request->getContent();
-        $this->logger->error("ZEZE ".$jsonString);
         try {
             $eventNotification = new EventNotification($jsonString);
             if (!$parking = $this->parkingRepository->findByNumber($eventNotification->data->id)) {
