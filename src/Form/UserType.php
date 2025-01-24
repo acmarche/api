@@ -12,7 +12,7 @@ class UserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $roles = ['ROLE_USER' => 'ROLE_USER', 'ROLE_API_ADMIN' => 'ROLE_API_ADMIN'];
+        $roles = ['ROLE_API_API' => 'ROLE_API_API', 'ROLE_API_ADMIN' => 'ROLE_API_ADMIN'];
         $builder
             ->add('nom')
             ->add('username')

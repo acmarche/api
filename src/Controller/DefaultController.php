@@ -131,7 +131,7 @@ class DefaultController extends AbstractController
     }
 
     #[Route(path: '/secure/parking/json', name: 'api_parking_json', methods: ['GET'])]
-    #[IsGranted('ROLE_USER')]
+    #[IsGranted('ROLE_API_API')]
     public function parkingJson(): JsonResponse
     {
         return $this->json($this->parkingRepository->findAll());
