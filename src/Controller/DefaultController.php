@@ -109,7 +109,7 @@ class DefaultController extends AbstractController
     public function parking(Request $request): JsonResponse
     {
         $jsonString = $request->getContent();
-        $this->logger->warning("ZEZE ".$jsonString);
+        $this->logger->error("ZEZE ".$jsonString);
         try {
             $eventNotification = new EventNotification($jsonString);
             if (!$parking = $this->parkingRepository->findByNumber($eventNotification->data->id)) {
@@ -137,7 +137,7 @@ class DefaultController extends AbstractController
         return $this->json($this->parkingRepository->findAll());
     }
 
-    #[Route(path: '/parking', name: 'api_parking_map')]
+    #[Route(path: '/map/parking', name: 'api_parking_map')]
     public function parkingMap(): Response
     {
         $parkings = $this->parkingRepository->findAll();
