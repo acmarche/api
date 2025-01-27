@@ -25,8 +25,8 @@ class ApiAuthenticator extends AbstractLoginFormAuthenticator
 
     public function authenticate(Request $request): Passport
     {
-        $username = $request->request->get('username', '');
-        $password = $request->request->get('password', '');
+        $username = $request->request->get('_username', '');
+        $password = $request->request->get('_password', '');
         $token = $request->request->get('_csrf_token', '');
 
         $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $username);
