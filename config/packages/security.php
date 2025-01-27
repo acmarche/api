@@ -20,8 +20,7 @@ return static function (SecurityConfig $security): void {
 
     $mainFirewall = $security
         ->firewall('main')
-        ->lazy(true)
-        ->pattern('/secure');
+        ->lazy(true);
 
     $mainFirewall
         ->logout()

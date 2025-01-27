@@ -31,19 +31,22 @@ class ApiAuthenticator extends AbstractLoginFormAuthenticator
 
         $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $username);
 
+        $badges =
+            [
+                new CsrfTokenBadge('authenticate', $token),
+            ];
+
         return new Passport(
             new UserBadge($username),
             new PasswordCredentials($password),
-            [
-                new CsrfTokenBadge('authenticate', $token),
-            ],
+            $badges,
         );
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
-            return new RedirectResponse($targetPath,  Response::HTTP_SEE_OTHER);
+            return new RedirectResponse($targetPath, Response::HTTP_SEE_OTHER);
         }
 
         return new RedirectResponse($this->urlGenerator->generate('api_home'));
