@@ -30,7 +30,8 @@ return static function (SecurityConfig $security): void {
     $mainFirewall
         ->formLogin()
         ->loginPath('app_login')
-        ->checkPath('app_login')
+        //->checkPath('app_login')
+        ->defaultTargetPath('app_home')
         ->rememberMe(true)
         ->enableCsrf(true);
 
