@@ -43,7 +43,7 @@ class ApiAuthenticator extends AbstractLoginFormAuthenticator
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
-            return new RedirectResponse($targetPath);
+            return new RedirectResponse($targetPath,  Response::HTTP_SEE_OTHER);
         }
 
         return new RedirectResponse($this->urlGenerator->generate('api_home'));
