@@ -16,8 +16,11 @@
             <a href="{{ path('api_parking_map') }}">Parkings</a>
         </li>
     </ul>
-    {% if is_granted('ROLE_ADMIN') %}
+    {% if is_granted('ROLE_API_ADMIN') %}
         <ul class="list-group">
+            <li class="list-group-item">
+                <a href="{{ path('api_user_index') }}">Users</a>
+            </li>
             <li class="list-group-item">
                 <a href="{{ path('bottin_api_fiches') }}">Fiches</a>
             </li>
