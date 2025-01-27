@@ -35,6 +35,8 @@ class Parking
     public float $latitude;
     #[ORM\Column(nullable: false)]
     public float $longitude;
+    #[ORM\Column(length: 200, nullable: true)]
+    public string $refDevice;
 
     public static function createFromEvent(EventNotification $eventNotification): Parking
     {
@@ -53,6 +55,7 @@ class Parking
             $date = null;
         }
         $parking->status_date = $date;
+        $parking->refDevice = $eventNotification->data->refDevice->value;
         $parking->refParkingSite = $eventNotification->data->refParkingSite->value;
         $parking->refParkingGroup = $eventNotification->data->refParkingGroup->value;
 
