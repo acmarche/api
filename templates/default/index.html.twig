@@ -15,6 +15,9 @@
         <li class="list-group-item">
             <a href="{{ path('api_parking_map') }}">Parkings</a>
         </li>
+        <li class="list-group-item">
+            <a href="{{ path('api_station_index') }}">Capteurs d'air</a>
+        </li>
     </ul>
     {% if is_granted('ROLE_API_ADMIN') %}
         <ul class="list-group">
