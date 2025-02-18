@@ -26,6 +26,11 @@ class ParkingController extends AbstractController
         private readonly ApiMailer $apiMailer,
     ) {}
 
+    /**
+     * Push from
+     * @param Request $request
+     * @return JsonResponse
+     */
     #[Route(path: '/parking', methods: ['POST'])]
     public function parking(Request $request): JsonResponse
     {
@@ -50,9 +55,15 @@ class ParkingController extends AbstractController
         }
     }
 
-    #[Route(path: '/secure/parking/json', name: 'api_parking_json', methods: ['GET'])]
-    #[IsGranted('ROLE_API_API')]
+    #[Route(path: '/parking/json', name: 'api_parking_json', methods: ['GET'])]
     public function parkingJson(): JsonResponse
+    {
+        return $this->json($this->parkingRepository->findAll());
+    }
+
+    #[Route(path: '/secure/parking/json', name: 'api_parking_secure_json', methods: ['GET'])]
+    #[IsGranted('ROLE_API_API')]
+    public function parkingSecureJson(): JsonResponse
     {
         return $this->json($this->parkingRepository->findAll());
     }
