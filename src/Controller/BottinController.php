@@ -33,7 +33,8 @@ class BottinController extends AbstractController
         private readonly LoggerInterface $logger,
         private readonly ApiMailer $mailer,
         private readonly CapApi $capApi,
-    ) {}
+    ) {
+    }
 
     #[Route(path: '/bottin/fiches', name: 'bottin_api_fiches', methods: ['GET'], format: 'json')]
     public function fiches(): JsonResponse
@@ -137,6 +138,10 @@ class BottinController extends AbstractController
                         } catch (\Exception $exception) {
                             $this->mailer->sendError($exception->getMessage());
                         }
+                    }
+
+                    if (isset($capFiche['rightAccess'])) {
+                        unset($capFiche['rightAccess']);
                     }
 
                     $fiche['cap'] = $capFiche;
