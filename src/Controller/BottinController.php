@@ -140,8 +140,8 @@ class BottinController extends AbstractController
                         }
                     }
 
-                    if (isset($capFiche['rightAccess'])) {
-                        unset($capFiche['rightAccess']);
+                    if (isset($capFiche->rightAccess)) {
+                        unset($capFiche->rightAccess);
                     }
 
                     $fiche['cap'] = $capFiche;
@@ -195,8 +195,8 @@ class BottinController extends AbstractController
                         }
                     }
 
-                    if (isset($capFiche['rightAccess'])) {
-                        unset($capFiche['rightAccess']);
+                    if (isset($capFiche->rightAccess)) {
+                        unset($capFiche->rightAccess);
                     }
                     $fiche['cap'] = $capFiche;
                     $data[] = $fiche;
@@ -265,8 +265,8 @@ class BottinController extends AbstractController
                         }
                     }
 
-                    if (isset($capFiche['rightAccess'])) {
-                        unset($capFiche['rightAccess']);
+                    if (isset($capFiche->rightAccess)) {
+                        unset($capFiche->rightAccess);
                     }
                     $fiche['cap'] = $capFiche;
                     $data[] = $fiche;
@@ -320,8 +320,8 @@ class BottinController extends AbstractController
                         }
                     }
 
-                    if (isset($capFiche['rightAccess'])) {
-                        unset($capFiche['rightAccess']);
+                    if (isset($capFiche->rightAccess)) {
+                        unset($capFiche->rightAccess);
                     }
                     $fiche['cap'] = $capFiche;
                     $data[] = $fiche;
@@ -372,8 +372,8 @@ class BottinController extends AbstractController
                     }
                 }
 
-                if (isset($capFiche['rightAccess'])) {
-                    unset($capFiche['rightAccess']);
+                if (isset($capFiche->rightAccess)) {
+                    unset($capFiche->rightAccess);
                 }
                 $fiche['cap'] = $capFiche;
 
@@ -406,8 +406,8 @@ class BottinController extends AbstractController
             }
         }
 
-        if (isset($capFiche['rightAccess'])) {
-            unset($capFiche['rightAccess']);
+        if (isset($capFiche->rightAccess)) {
+            unset($capFiche->rightAccess);
         }
         $fiche['cap'] = $capFiche;
 
