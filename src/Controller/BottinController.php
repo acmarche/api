@@ -345,7 +345,7 @@ class BottinController extends AbstractController
     }
 
     #[Route(path: '/bottin/fiche/{id}', name: 'bottin_api_fiche_id', methods: ['GET'], format: 'json')]
-    public function ficheById(int $id): JsonResponse
+    public function ficheById(int|string $id): JsonResponse
     {
         return $this->cache->get(
             'fiche-byid-'.$id.$this->cache_prefix,
