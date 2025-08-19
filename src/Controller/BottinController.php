@@ -195,6 +195,9 @@ class BottinController extends AbstractController
                         }
                     }
 
+                    if (isset($capFiche['rightAccess'])) {
+                        unset($capFiche['rightAccess']);
+                    }
                     $fiche['cap'] = $capFiche;
                     $data[] = $fiche;
                     $i++;
@@ -262,6 +265,9 @@ class BottinController extends AbstractController
                         }
                     }
 
+                    if (isset($capFiche['rightAccess'])) {
+                        unset($capFiche['rightAccess']);
+                    }
                     $fiche['cap'] = $capFiche;
                     $data[] = $fiche;
                     $i++;
@@ -314,6 +320,9 @@ class BottinController extends AbstractController
                         }
                     }
 
+                    if (isset($capFiche['rightAccess'])) {
+                        unset($capFiche['rightAccess']);
+                    }
                     $fiche['cap'] = $capFiche;
                     $data[] = $fiche;
                     $i++;
@@ -363,6 +372,9 @@ class BottinController extends AbstractController
                     }
                 }
 
+                if (isset($capFiche['rightAccess'])) {
+                    unset($capFiche['rightAccess']);
+                }
                 $fiche['cap'] = $capFiche;
 
                 return $this->json($fiche);
@@ -394,6 +406,9 @@ class BottinController extends AbstractController
             }
         }
 
+        if (isset($capFiche['rightAccess'])) {
+            unset($capFiche['rightAccess']);
+        }
         $fiche['cap'] = $capFiche;
 
         return $this->json($fiche);
