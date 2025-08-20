@@ -545,8 +545,12 @@ class BottinController extends AbstractController
         } catch (TransportExceptionInterface $e) {
             return ['error' => 1, 'message' => 'Error '.$e->getMessage()];
         }
-        if ($request->getStatusCode() === 404) {
-            return ['error' => 1, 'message' => 'Not found'];
+        try {
+            if ($request->getStatusCode() === 404) {
+                return ['error' => 1, 'message' => 'Not found'];
+            }
+        } catch (TransportExceptionInterface $e) {
+             return ['error' => 1, 'message' => 'Error '.$e->getMessage()];
         }
         try {
             return json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
