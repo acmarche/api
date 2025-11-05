@@ -2,9 +2,7 @@
 
 namespace AcMarche\Api\Controller;
 
-use AcMarche\Api\Http\CapApi;
 use AcMarche\Api\Logger\LoggerDb;
-use AcMarche\Api\Mailer\ApiMailer;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -31,8 +29,6 @@ class BottinController extends AbstractController
         private readonly CacheInterface $cache,
         private readonly LoggerDb $loggerDb,
         private readonly LoggerInterface $logger,
-        private readonly ApiMailer $mailer,
-        private readonly CapApi $capApi,
     ) {
     }
 
@@ -124,27 +120,7 @@ class BottinController extends AbstractController
                 }
                 $data = [];
                 foreach ($dataTmp as $fiche) {
-                    $cap = null;
-                    try {
-                        $cap = json_decode($this->capApi->find($fiche['id']));
-                    } catch (\Exception $exception) {
-                        $this->mailer->sendError($exception->getMessage());
-                    }
-
-                    $capFiche = [];
-                    if ($cap && $cap->commercantId) {
-                        try {
-                            $capFiche = json_decode($this->capApi->shop($cap->commercantId));
-                        } catch (\Exception $exception) {
-                            $this->mailer->sendError($exception->getMessage());
-                        }
-                    }
-
-                    if (isset($capFiche->rightAccess)) {
-                        unset($capFiche->rightAccess);
-                    }
-
-                    $fiche['cap'] = $capFiche;
+                    $fiche['cap'] = [];
                     $data[] = $fiche;
                 }
 
@@ -179,26 +155,8 @@ class BottinController extends AbstractController
                     if ($i > 50) {
                         break;
                     }
-                    $cap = null;
-                    try {
-                        $cap = json_decode($this->capApi->find($fiche['id']));
-                    } catch (\Exception $exception) {
-                        //$this->mailer->sendError($exception->getMessage());
-                    }
 
-                    $capFiche = [];
-                    if ($cap && $cap->commercantId) {
-                        try {
-                            $capFiche = json_decode($this->capApi->shop($cap->commercantId));
-                        } catch (\Exception $exception) {
-                            //  $this->mailer->sendError($exception->getMessage());
-                        }
-                    }
-
-                    if (isset($capFiche->rightAccess)) {
-                        unset($capFiche->rightAccess);
-                    }
-                    $fiche['cap'] = $capFiche;
+                    $fiche['cap'] = [];
                     $data[] = $fiche;
                     $i++;
                 }
@@ -249,26 +207,8 @@ class BottinController extends AbstractController
                     if ($i > 50) {
                         break;
                     }
-                    $cap = null;
-                    try {
-                        $cap = json_decode($this->capApi->find($fiche['id']));
-                    } catch (\Exception $exception) {
-                        //$this->mailer->sendError($exception->getMessage());
-                    }
 
-                    $capFiche = [];
-                    if ($cap && $cap->commercantId) {
-                        try {
-                            $capFiche = json_decode($this->capApi->shop($cap->commercantId));
-                        } catch (\Exception $exception) {
-                            //  $this->mailer->sendError($exception->getMessage());
-                        }
-                    }
-
-                    if (isset($capFiche->rightAccess)) {
-                        unset($capFiche->rightAccess);
-                    }
-                    $fiche['cap'] = $capFiche;
+                    $fiche['cap'] = [];
                     $data[] = $fiche;
                     $i++;
                 }
@@ -304,26 +244,8 @@ class BottinController extends AbstractController
                     if ($i > 50) {
                         break;
                     }
-                    $cap = null;
-                    try {
-                        $cap = json_decode($this->capApi->find($fiche['id']));
-                    } catch (\Exception $exception) {
-                        //$this->mailer->sendError($exception->getMessage());
-                    }
 
-                    $capFiche = [];
-                    if ($cap && $cap->commercantId) {
-                        try {
-                            $capFiche = json_decode($this->capApi->shop($cap->commercantId));
-                        } catch (\Exception $exception) {
-                            //  $this->mailer->sendError($exception->getMessage());
-                        }
-                    }
-
-                    if (isset($capFiche->rightAccess)) {
-                        unset($capFiche->rightAccess);
-                    }
-                    $fiche['cap'] = $capFiche;
+                    $fiche['cap'] = [];
                     $data[] = $fiche;
                     $i++;
                 }
@@ -363,19 +285,7 @@ class BottinController extends AbstractController
                     return $this->json(null);
                 }
 
-                $cap = json_decode($this->capApi->find($fiche['id']));
-                $capFiche = [];
-                if ($cap && $cap->commercantId) {
-                    try {
-                        $capFiche = json_decode($this->capApi->shop($cap->commercantId));
-                    } catch (\Exception $exception) {
-                    }
-                }
-
-                if (isset($capFiche->rightAccess)) {
-                    unset($capFiche->rightAccess);
-                }
-                $fiche['cap'] = $capFiche;
+                $fiche['cap'] = [];
 
                 return $this->json($fiche);
             },
@@ -397,19 +307,7 @@ class BottinController extends AbstractController
             return $this->json(null);
         }
 
-        $capFiche = [];
-        $cap = json_decode($this->capApi->find($fiche['id']));
-        if ($cap && $cap->commercantId) {
-            try {
-                $capFiche = json_decode($this->capApi->shop($cap->commercantId));
-            } catch (\Exception $exception) {
-            }
-        }
-
-        if (isset($capFiche->rightAccess)) {
-            unset($capFiche->rightAccess);
-        }
-        $fiche['cap'] = $capFiche;
+        $fiche['cap'] = [];
 
         return $this->json($fiche);
     }
@@ -550,7 +448,7 @@ class BottinController extends AbstractController
                 return ['error' => 1, 'message' => 'Not found'];
             }
         } catch (TransportExceptionInterface $e) {
-             return ['error' => 1, 'message' => 'Error '.$e->getMessage()];
+            return ['error' => 1, 'message' => 'Error '.$e->getMessage()];
         }
         try {
             return json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
