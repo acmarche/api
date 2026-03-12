@@ -22,7 +22,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class BottinController extends AbstractController
 {
-    private string $cache_prefix = 'api_cache22';
+    private string $cache_prefix = 'api_cache33';
 
     public function __construct(
         #[Autowire(env: 'BOTTIN_URL')]
@@ -351,7 +351,7 @@ class BottinController extends AbstractController
             'fiche-byid-'.$id.$this->cache_prefix,
             function (ItemInterface $item) use ($id) {
                 $item->expiresAfter(18000);
-                $url = $this->baseUrl.'/bottin/fichebyid/'.$id;
+                $url = $this->baseUrl.'/bottin/fiche/'.$id;
 
                 try {
                     $fiche = $this->execute($url);
