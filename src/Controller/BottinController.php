@@ -267,53 +267,38 @@ class BottinController extends AbstractController
     }
 
     #[Route(path: '/bottin/fiche/{id}', name: 'bottin_api_fiche_id', methods: ['GET'], format: 'json')]
-    public function ficheById(int|string $id, Request $request): JsonResponse
+    public function ficheById(int|string $id): JsonResponse
     {
-        $authorization = $request->headers->get('Authorization');
-
-        // When a bearer token is provided, bypass the cache and forward it to
-        // bottin.marche.be so the protected "token" field can be returned. The
-        // response is not cached to avoid leaking the token to anonymous callers.
-        if ($authorization !== null && $authorization !== '') {
-            return $this->json($this->fetchFicheById($id, $authorization));
-        }
-
         return $this->cache->get(
             'fiche-byid-'.$id.$this->cache_prefix,
             function (ItemInterface $item) use ($id) {
                 $item->expiresAfter(18000);
+                $url = $this->baseUrl.'/bottin/fichebyid/'.$id;
 
-                return $this->json($this->fetchFicheById($id, null));
+                try {
+                    $fiche = $this->execute($url);
+                } catch (\Exception $exception) {
+                    return $this->json(null);
+                }
+
+                if (isset($fiche['error'])) {
+                    return $this->json(null);
+                }
+
+                $fiche['cap'] = [];
+
+                return $this->json($fiche);
             },
         );
     }
 
-    private function fetchFicheById(int|string $id, ?string $authorization): ?array
-    {
-        $url = $this->baseUrl.'/bottin/fichebyid/'.$id;
-
-        try {
-            $fiche = $this->execute($url, $authorization);
-        } catch (\Exception $exception) {
-            return null;
-        }
-
-        if ($fiche === null || isset($fiche['error'])) {
-            return null;
-        }
-
-        $fiche['cap'] = [];
-
-        return $fiche;
-    }
-
     #[Route(path: '/bottin/fichebyslugname/{slug}', name: 'bottin_api_fiche_slug', methods: ['GET'], format: 'json')]
-    public function ficheSlug(string $slug, Request $request): JsonResponse
+    public function ficheSlug(string $slug): JsonResponse
     {
         $slug = preg_replace("#\.#", "", $slug);
         $url = $this->baseUrl.'/bottin/fichebyslugname/'.$slug;
 
-        $fiche = $this->execute($url, $request->headers->get('Authorization'));
+        $fiche = $this->execute($url);
         if (!$fiche) {
             return $this->json(null);
         }
@@ -451,14 +436,10 @@ class BottinController extends AbstractController
         return $this->json([]);
     }
 
-    private function execute(string $url, ?string $authorization = null): ?array
+    private function execute(string $url): ?array
     {
-        $options = [];
-        if ($authorization !== null && $authorization !== '') {
-            $options['headers'] = ['Authorization' => $authorization];
-        }
         try {
-            $request = $this->httpClient->request("GET", $url, $options);
+            $request = $this->httpClient->request("GET", $url);
         } catch (TransportExceptionInterface $e) {
             return ['error' => 1, 'message' => 'Error '.$e->getMessage()];
         }
