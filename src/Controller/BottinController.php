@@ -106,7 +106,7 @@ class BottinController extends AbstractController
 
     private function fetchFicheById(int|string $id, ?string $authorization): ?array
     {
-        $url = $this->baseUrl.'/bottin/fichebyid/'.$id;
+        $url = $this->baseUrl.'/bottin/fiche/'.$id;
 
         try {
             $fiche = $this->execute($url, $authorization);
