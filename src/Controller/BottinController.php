@@ -123,6 +123,32 @@ class BottinController extends AbstractController
         return $fiche;
     }
 
+    #[Route(path: '/bottin/fichebyslugname/{slug}', name: 'bottin_api_fiche_slug', methods: ['GET'], format: 'json')]
+    public function ficheSlug(string $slug,  Request $request): JsonResponse
+    {
+        $slug = preg_replace("#\.#", "", $slug);
+        $url = $this->baseUrl.'/bottin/fichebyslugname/'.$slug;
+        $authorization = $request->headers->get('Authorization');
+
+        try {
+            $fiche = $this->execute($url, $authorization);
+        } catch (\Exception $exception) {
+            return $this->json(null);
+        }
+
+        if (!$fiche) {
+            return $this->json(null);
+        }
+
+        if (isset($fiche['error'])) {
+            return $this->json(null);
+        }
+
+        $fiche['cap'] = [];
+
+        return $this->json($fiche);
+    }
+
     private function execute(string $url, ?string $authorization = null): ?array
     {
         $options = [];
