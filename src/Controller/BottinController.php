@@ -141,7 +141,7 @@ class BottinController extends AbstractController
         }
 
         if (isset($fiche['error'])) {
-            return $this->json($fiche['error']);
+            return $this->json($fiche);
         }
 
         $fiche['cap'] = [];
