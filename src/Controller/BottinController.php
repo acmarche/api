@@ -133,7 +133,7 @@ class BottinController extends AbstractController
         try {
             $fiche = $this->execute($url, $authorization);
         } catch (\Exception $exception) {
-            return $this->json(null);
+            return $this->json(['error'=>$exception->getMessage()]);
         }
 
         if (!$fiche) {
@@ -141,7 +141,7 @@ class BottinController extends AbstractController
         }
 
         if (isset($fiche['error'])) {
-            return $this->json(null);
+            return $this->json($fiche['error']);
         }
 
         $fiche['cap'] = [];
