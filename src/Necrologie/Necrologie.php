@@ -5,22 +5,37 @@ namespace AcMarche\Api\Necrologie;
 
 use DateTime;
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\Log\LoggerInterface;
 use SoapClient;
+use Throwable;
 use Twig\Environment;
 
 class Necrologie
 {
-    public function __construct(private CacheItemPoolInterface $cache, private Environment $environment)
-    {
+    public function __construct(
+        private CacheItemPoolInterface $cache,
+        private Environment $environment,
+        private LoggerInterface $logger
+    ) {
 
     }
 
-    public function getNecro(bool $fullpage = false)
+    public function getNecro(bool $fullpage = false): string
     {
         $necrologie = $this->cache->getItem('necrologie_'.$fullpage);
 
         if (!$necrologie->isHit()) {
-            $enaos = $this->getEnaos();
+            try {
+                $enaos = $this->getEnaos();
+            } catch (Throwable $throwable) {
+                $this->logger->error('Necrologie enaos: '.$throwable->getMessage(), ['exception' => $throwable]);
+
+                //ne pas garder l'erreur en cache jusqu'a demain
+                $necrologie->expiresAfter(300);
+                $this->cache->save($necrologie->set(''));
+
+                return '';
+            }
 
             if ($fullpage) {
                 $html = $this->environment->render(
@@ -44,9 +59,14 @@ class Necrologie
         return $necrologie->get();
     }
 
-    private function getEnaos()
+    private function getEnaos(): string
     {
-        $url = "http://webservices.enaos.net/derniersdeces.asmx?WSDL";
+        /**
+         * WSDL embarque: depuis libxml 2.13 le support HTTP (nanohttp) a ete retire,
+         * SoapClient ne sait plus telecharger un WSDL distant (SOAP-ERROR: Parsing WSDL).
+         * Le endpoint des appels reste celui declare dans le WSDL.
+         */
+        $url = dirname(__DIR__, 2).'/Resources/wsdl/derniersdeces.wsdl';
 
         $service = new SoapClient(
             $url, array(
