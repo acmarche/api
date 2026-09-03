@@ -1,23 +1,32 @@
 <?php
 
-use Symfony\Config\DoctrineConfig;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\Env;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (DoctrineConfig $doctrine) {
-
-    $doctrine
-        ->dbal()
-        ->connection('default')
-        ->url(env('DATABASE_URL')->resolve())
-        ->charset('utf8mb4');
-
-    $emApi = $doctrine->orm()->entityManager('default');
-    $emApi->connection('default');
-    $emApi->mapping('AcMarche\Api')
-        ->isBundle(false)
-        ->type('attribute')
-        ->dir('%kernel.project_dir%/src/AcMarche/Api/src/Entity')
-        ->prefix('AcMarche\Api')
-        ->alias('AcMarche\Api');
-
+return static function (ContainerConfigurator $container): void {
+    $container->extension('doctrine', [
+        'dbal' => [
+            'connections' => [
+                'default' => [
+                    'url' => '%env(resolve:DATABASE_URL)%',
+                    'charset' => 'utf8mb4',
+                ],
+            ],
+        ],
+        'orm' => [
+            'entity_managers' => [
+                'default' => [
+                    'connection' => 'default',
+                    'mappings' => [
+                        'AcMarche\Api' => [
+                            'is_bundle' => false,
+                            'type' => 'attribute',
+                            'dir' => '%kernel.project_dir%/src/AcMarche/Api/src/Entity',
+                            'prefix' => 'AcMarche\Api',
+                            'alias' => 'AcMarche\Api',
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ]);
 };

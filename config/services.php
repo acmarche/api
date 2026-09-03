@@ -16,7 +16,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->private();
 
     $services->load('AcMarche\Api\\', __DIR__.'/../src/*')
-        ->exclude([__DIR__.'/../src/{Entity,Tests}']);
+        ->exclude([
+            __DIR__.'/../src/{Entity,Tests}',
+            //bundles AcMarche\Icar et AcMarche\Issep pas encore portes
+            __DIR__.'/../src/Controller/DefaultController.php',
+            __DIR__.'/../src/Controller/IssepController.php',
+        ]);
 
 
 };
