@@ -1,0 +1,616 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://webservices.enaos.net/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" targetNamespace="http://webservices.enaos.net/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://webservices.enaos.net/">
+      <s:element name="TousEnHTMLAvecCtrl">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Interlocuteur" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="MDP" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="Page" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="NbreParPage" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="TousEnHTMLAvecCtrlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="TousEnHTMLAvecCtrlResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ParPaysEnHTMLAvecCtrl">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Interlocuteur" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="MDP" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="Pays" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Page" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="NbreParPage" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ParPaysEnHTMLAvecCtrlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ParPaysEnHTMLAvecCtrlResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ParCodeEPCEnHTMLAvecCtrl">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Interlocuteur" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="MDP" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="Pays" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="CodeEPC" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="Page" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="NbreParPage" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ParCodeEPCEnHTMLAvecCtrlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ParCodeEPCEnHTMLAvecCtrlResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ParCodePostalEnHTMLAvecCtrl">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Interlocuteur" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="MDP" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="Pays" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="CP" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="Page" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="NbreParPage" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ParCodePostalEnHTMLAvecCtrlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ParCodePostalEnHTMLAvecCtrlResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ParLocaliteEnHTMLAvecCtrl">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Interlocuteur" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="MDP" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="Pays" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="Localite" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="Page" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="NbreParPage" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ParLocaliteEnHTMLAvecCtrlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ParLocaliteEnHTMLAvecCtrlResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ParRegionEnHTMLAvecCtrl">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Interlocuteur" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="MDP" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="Region" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Page" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="NbreParPage" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ParRegionEnHTMLAvecCtrlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ParRegionEnHTMLAvecCtrlResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="string" nillable="true" type="s:string" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="TousEnHTMLAvecCtrlSoapIn">
+    <wsdl:part name="parameters" element="tns:TousEnHTMLAvecCtrl" />
+  </wsdl:message>
+  <wsdl:message name="TousEnHTMLAvecCtrlSoapOut">
+    <wsdl:part name="parameters" element="tns:TousEnHTMLAvecCtrlResponse" />
+  </wsdl:message>
+  <wsdl:message name="ParPaysEnHTMLAvecCtrlSoapIn">
+    <wsdl:part name="parameters" element="tns:ParPaysEnHTMLAvecCtrl" />
+  </wsdl:message>
+  <wsdl:message name="ParPaysEnHTMLAvecCtrlSoapOut">
+    <wsdl:part name="parameters" element="tns:ParPaysEnHTMLAvecCtrlResponse" />
+  </wsdl:message>
+  <wsdl:message name="ParCodeEPCEnHTMLAvecCtrlSoapIn">
+    <wsdl:part name="parameters" element="tns:ParCodeEPCEnHTMLAvecCtrl" />
+  </wsdl:message>
+  <wsdl:message name="ParCodeEPCEnHTMLAvecCtrlSoapOut">
+    <wsdl:part name="parameters" element="tns:ParCodeEPCEnHTMLAvecCtrlResponse" />
+  </wsdl:message>
+  <wsdl:message name="ParCodePostalEnHTMLAvecCtrlSoapIn">
+    <wsdl:part name="parameters" element="tns:ParCodePostalEnHTMLAvecCtrl" />
+  </wsdl:message>
+  <wsdl:message name="ParCodePostalEnHTMLAvecCtrlSoapOut">
+    <wsdl:part name="parameters" element="tns:ParCodePostalEnHTMLAvecCtrlResponse" />
+  </wsdl:message>
+  <wsdl:message name="ParLocaliteEnHTMLAvecCtrlSoapIn">
+    <wsdl:part name="parameters" element="tns:ParLocaliteEnHTMLAvecCtrl" />
+  </wsdl:message>
+  <wsdl:message name="ParLocaliteEnHTMLAvecCtrlSoapOut">
+    <wsdl:part name="parameters" element="tns:ParLocaliteEnHTMLAvecCtrlResponse" />
+  </wsdl:message>
+  <wsdl:message name="ParRegionEnHTMLAvecCtrlSoapIn">
+    <wsdl:part name="parameters" element="tns:ParRegionEnHTMLAvecCtrl" />
+  </wsdl:message>
+  <wsdl:message name="ParRegionEnHTMLAvecCtrlSoapOut">
+    <wsdl:part name="parameters" element="tns:ParRegionEnHTMLAvecCtrlResponse" />
+  </wsdl:message>
+  <wsdl:message name="TousEnHTMLAvecCtrlHttpGetIn">
+    <wsdl:part name="Interlocuteur" type="s:string" />
+    <wsdl:part name="MDP" type="s:string" />
+    <wsdl:part name="Page" type="s:string" />
+    <wsdl:part name="NbreParPage" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="TousEnHTMLAvecCtrlHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="ParPaysEnHTMLAvecCtrlHttpGetIn">
+    <wsdl:part name="Interlocuteur" type="s:string" />
+    <wsdl:part name="MDP" type="s:string" />
+    <wsdl:part name="Pays" type="s:string" />
+    <wsdl:part name="Page" type="s:string" />
+    <wsdl:part name="NbreParPage" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ParPaysEnHTMLAvecCtrlHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="ParCodeEPCEnHTMLAvecCtrlHttpGetIn">
+    <wsdl:part name="Interlocuteur" type="s:string" />
+    <wsdl:part name="MDP" type="s:string" />
+    <wsdl:part name="Pays" type="s:string" />
+    <wsdl:part name="CodeEPC" type="s:string" />
+    <wsdl:part name="Page" type="s:string" />
+    <wsdl:part name="NbreParPage" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ParCodeEPCEnHTMLAvecCtrlHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="ParCodePostalEnHTMLAvecCtrlHttpGetIn">
+    <wsdl:part name="Interlocuteur" type="s:string" />
+    <wsdl:part name="MDP" type="s:string" />
+    <wsdl:part name="Pays" type="s:string" />
+    <wsdl:part name="CP" type="s:string" />
+    <wsdl:part name="Page" type="s:string" />
+    <wsdl:part name="NbreParPage" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ParCodePostalEnHTMLAvecCtrlHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="ParLocaliteEnHTMLAvecCtrlHttpGetIn">
+    <wsdl:part name="Interlocuteur" type="s:string" />
+    <wsdl:part name="MDP" type="s:string" />
+    <wsdl:part name="Pays" type="s:string" />
+    <wsdl:part name="Localite" type="s:string" />
+    <wsdl:part name="Page" type="s:string" />
+    <wsdl:part name="NbreParPage" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ParLocaliteEnHTMLAvecCtrlHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="ParRegionEnHTMLAvecCtrlHttpGetIn">
+    <wsdl:part name="Interlocuteur" type="s:string" />
+    <wsdl:part name="MDP" type="s:string" />
+    <wsdl:part name="Region" type="s:string" />
+    <wsdl:part name="Page" type="s:string" />
+    <wsdl:part name="NbreParPage" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ParRegionEnHTMLAvecCtrlHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="TousEnHTMLAvecCtrlHttpPostIn">
+    <wsdl:part name="Interlocuteur" type="s:string" />
+    <wsdl:part name="MDP" type="s:string" />
+    <wsdl:part name="Page" type="s:string" />
+    <wsdl:part name="NbreParPage" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="TousEnHTMLAvecCtrlHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="ParPaysEnHTMLAvecCtrlHttpPostIn">
+    <wsdl:part name="Interlocuteur" type="s:string" />
+    <wsdl:part name="MDP" type="s:string" />
+    <wsdl:part name="Pays" type="s:string" />
+    <wsdl:part name="Page" type="s:string" />
+    <wsdl:part name="NbreParPage" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ParPaysEnHTMLAvecCtrlHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="ParCodeEPCEnHTMLAvecCtrlHttpPostIn">
+    <wsdl:part name="Interlocuteur" type="s:string" />
+    <wsdl:part name="MDP" type="s:string" />
+    <wsdl:part name="Pays" type="s:string" />
+    <wsdl:part name="CodeEPC" type="s:string" />
+    <wsdl:part name="Page" type="s:string" />
+    <wsdl:part name="NbreParPage" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ParCodeEPCEnHTMLAvecCtrlHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="ParCodePostalEnHTMLAvecCtrlHttpPostIn">
+    <wsdl:part name="Interlocuteur" type="s:string" />
+    <wsdl:part name="MDP" type="s:string" />
+    <wsdl:part name="Pays" type="s:string" />
+    <wsdl:part name="CP" type="s:string" />
+    <wsdl:part name="Page" type="s:string" />
+    <wsdl:part name="NbreParPage" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ParCodePostalEnHTMLAvecCtrlHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="ParLocaliteEnHTMLAvecCtrlHttpPostIn">
+    <wsdl:part name="Interlocuteur" type="s:string" />
+    <wsdl:part name="MDP" type="s:string" />
+    <wsdl:part name="Pays" type="s:string" />
+    <wsdl:part name="Localite" type="s:string" />
+    <wsdl:part name="Page" type="s:string" />
+    <wsdl:part name="NbreParPage" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ParLocaliteEnHTMLAvecCtrlHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="ParRegionEnHTMLAvecCtrlHttpPostIn">
+    <wsdl:part name="Interlocuteur" type="s:string" />
+    <wsdl:part name="MDP" type="s:string" />
+    <wsdl:part name="Region" type="s:string" />
+    <wsdl:part name="Page" type="s:string" />
+    <wsdl:part name="NbreParPage" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ParRegionEnHTMLAvecCtrlHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:portType name="DerniersDecesSoap">
+    <wsdl:operation name="TousEnHTMLAvecCtrl">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Envoie du code HTML avec tous les derniers décès.</wsdl:documentation>
+      <wsdl:input message="tns:TousEnHTMLAvecCtrlSoapIn" />
+      <wsdl:output message="tns:TousEnHTMLAvecCtrlSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ParPaysEnHTMLAvecCtrl">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Envoie du code HTML avec les derniers décès pour un pays déterminé.</wsdl:documentation>
+      <wsdl:input message="tns:ParPaysEnHTMLAvecCtrlSoapIn" />
+      <wsdl:output message="tns:ParPaysEnHTMLAvecCtrlSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ParCodeEPCEnHTMLAvecCtrl">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Envoie du code HTML avec les derniers décès pour un état, une province, un canton ou un département déterminé.</wsdl:documentation>
+      <wsdl:input message="tns:ParCodeEPCEnHTMLAvecCtrlSoapIn" />
+      <wsdl:output message="tns:ParCodeEPCEnHTMLAvecCtrlSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ParCodePostalEnHTMLAvecCtrl">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Envoie du code HTML avec les derniers décès pour un code postal ou le début de celui-ci</wsdl:documentation>
+      <wsdl:input message="tns:ParCodePostalEnHTMLAvecCtrlSoapIn" />
+      <wsdl:output message="tns:ParCodePostalEnHTMLAvecCtrlSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ParLocaliteEnHTMLAvecCtrl">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Envoie du code HTML avec les derniers décès pour une localité ou le début de celle-ci.</wsdl:documentation>
+      <wsdl:input message="tns:ParLocaliteEnHTMLAvecCtrlSoapIn" />
+      <wsdl:output message="tns:ParLocaliteEnHTMLAvecCtrlSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ParRegionEnHTMLAvecCtrl">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Envoie du code HTML avec les derniers décès pour une région déterminée.</wsdl:documentation>
+      <wsdl:input message="tns:ParRegionEnHTMLAvecCtrlSoapIn" />
+      <wsdl:output message="tns:ParRegionEnHTMLAvecCtrlSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="DerniersDecesHttpGet">
+    <wsdl:operation name="TousEnHTMLAvecCtrl">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Envoie du code HTML avec tous les derniers décès.</wsdl:documentation>
+      <wsdl:input message="tns:TousEnHTMLAvecCtrlHttpGetIn" />
+      <wsdl:output message="tns:TousEnHTMLAvecCtrlHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ParPaysEnHTMLAvecCtrl">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Envoie du code HTML avec les derniers décès pour un pays déterminé.</wsdl:documentation>
+      <wsdl:input message="tns:ParPaysEnHTMLAvecCtrlHttpGetIn" />
+      <wsdl:output message="tns:ParPaysEnHTMLAvecCtrlHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ParCodeEPCEnHTMLAvecCtrl">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Envoie du code HTML avec les derniers décès pour un état, une province, un canton ou un département déterminé.</wsdl:documentation>
+      <wsdl:input message="tns:ParCodeEPCEnHTMLAvecCtrlHttpGetIn" />
+      <wsdl:output message="tns:ParCodeEPCEnHTMLAvecCtrlHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ParCodePostalEnHTMLAvecCtrl">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Envoie du code HTML avec les derniers décès pour un code postal ou le début de celui-ci</wsdl:documentation>
+      <wsdl:input message="tns:ParCodePostalEnHTMLAvecCtrlHttpGetIn" />
+      <wsdl:output message="tns:ParCodePostalEnHTMLAvecCtrlHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ParLocaliteEnHTMLAvecCtrl">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Envoie du code HTML avec les derniers décès pour une localité ou le début de celle-ci.</wsdl:documentation>
+      <wsdl:input message="tns:ParLocaliteEnHTMLAvecCtrlHttpGetIn" />
+      <wsdl:output message="tns:ParLocaliteEnHTMLAvecCtrlHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ParRegionEnHTMLAvecCtrl">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Envoie du code HTML avec les derniers décès pour une région déterminée.</wsdl:documentation>
+      <wsdl:input message="tns:ParRegionEnHTMLAvecCtrlHttpGetIn" />
+      <wsdl:output message="tns:ParRegionEnHTMLAvecCtrlHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="DerniersDecesHttpPost">
+    <wsdl:operation name="TousEnHTMLAvecCtrl">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Envoie du code HTML avec tous les derniers décès.</wsdl:documentation>
+      <wsdl:input message="tns:TousEnHTMLAvecCtrlHttpPostIn" />
+      <wsdl:output message="tns:TousEnHTMLAvecCtrlHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ParPaysEnHTMLAvecCtrl">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Envoie du code HTML avec les derniers décès pour un pays déterminé.</wsdl:documentation>
+      <wsdl:input message="tns:ParPaysEnHTMLAvecCtrlHttpPostIn" />
+      <wsdl:output message="tns:ParPaysEnHTMLAvecCtrlHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ParCodeEPCEnHTMLAvecCtrl">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Envoie du code HTML avec les derniers décès pour un état, une province, un canton ou un département déterminé.</wsdl:documentation>
+      <wsdl:input message="tns:ParCodeEPCEnHTMLAvecCtrlHttpPostIn" />
+      <wsdl:output message="tns:ParCodeEPCEnHTMLAvecCtrlHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ParCodePostalEnHTMLAvecCtrl">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Envoie du code HTML avec les derniers décès pour un code postal ou le début de celui-ci</wsdl:documentation>
+      <wsdl:input message="tns:ParCodePostalEnHTMLAvecCtrlHttpPostIn" />
+      <wsdl:output message="tns:ParCodePostalEnHTMLAvecCtrlHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ParLocaliteEnHTMLAvecCtrl">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Envoie du code HTML avec les derniers décès pour une localité ou le début de celle-ci.</wsdl:documentation>
+      <wsdl:input message="tns:ParLocaliteEnHTMLAvecCtrlHttpPostIn" />
+      <wsdl:output message="tns:ParLocaliteEnHTMLAvecCtrlHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ParRegionEnHTMLAvecCtrl">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Envoie du code HTML avec les derniers décès pour une région déterminée.</wsdl:documentation>
+      <wsdl:input message="tns:ParRegionEnHTMLAvecCtrlHttpPostIn" />
+      <wsdl:output message="tns:ParRegionEnHTMLAvecCtrlHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="DerniersDecesSoap" type="tns:DerniersDecesSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="TousEnHTMLAvecCtrl">
+      <soap:operation soapAction="http://webservices.enaos.net/TousEnHTMLAvecCtrl" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ParPaysEnHTMLAvecCtrl">
+      <soap:operation soapAction="http://webservices.enaos.net/ParPaysEnHTMLAvecCtrl" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ParCodeEPCEnHTMLAvecCtrl">
+      <soap:operation soapAction="http://webservices.enaos.net/ParCodeEPCEnHTMLAvecCtrl" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ParCodePostalEnHTMLAvecCtrl">
+      <soap:operation soapAction="http://webservices.enaos.net/ParCodePostalEnHTMLAvecCtrl" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ParLocaliteEnHTMLAvecCtrl">
+      <soap:operation soapAction="http://webservices.enaos.net/ParLocaliteEnHTMLAvecCtrl" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ParRegionEnHTMLAvecCtrl">
+      <soap:operation soapAction="http://webservices.enaos.net/ParRegionEnHTMLAvecCtrl" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="DerniersDecesSoap12" type="tns:DerniersDecesSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="TousEnHTMLAvecCtrl">
+      <soap12:operation soapAction="http://webservices.enaos.net/TousEnHTMLAvecCtrl" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ParPaysEnHTMLAvecCtrl">
+      <soap12:operation soapAction="http://webservices.enaos.net/ParPaysEnHTMLAvecCtrl" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ParCodeEPCEnHTMLAvecCtrl">
+      <soap12:operation soapAction="http://webservices.enaos.net/ParCodeEPCEnHTMLAvecCtrl" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ParCodePostalEnHTMLAvecCtrl">
+      <soap12:operation soapAction="http://webservices.enaos.net/ParCodePostalEnHTMLAvecCtrl" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ParLocaliteEnHTMLAvecCtrl">
+      <soap12:operation soapAction="http://webservices.enaos.net/ParLocaliteEnHTMLAvecCtrl" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ParRegionEnHTMLAvecCtrl">
+      <soap12:operation soapAction="http://webservices.enaos.net/ParRegionEnHTMLAvecCtrl" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="DerniersDecesHttpGet" type="tns:DerniersDecesHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="TousEnHTMLAvecCtrl">
+      <http:operation location="/TousEnHTMLAvecCtrl" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ParPaysEnHTMLAvecCtrl">
+      <http:operation location="/ParPaysEnHTMLAvecCtrl" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ParCodeEPCEnHTMLAvecCtrl">
+      <http:operation location="/ParCodeEPCEnHTMLAvecCtrl" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ParCodePostalEnHTMLAvecCtrl">
+      <http:operation location="/ParCodePostalEnHTMLAvecCtrl" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ParLocaliteEnHTMLAvecCtrl">
+      <http:operation location="/ParLocaliteEnHTMLAvecCtrl" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ParRegionEnHTMLAvecCtrl">
+      <http:operation location="/ParRegionEnHTMLAvecCtrl" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="DerniersDecesHttpPost" type="tns:DerniersDecesHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="TousEnHTMLAvecCtrl">
+      <http:operation location="/TousEnHTMLAvecCtrl" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ParPaysEnHTMLAvecCtrl">
+      <http:operation location="/ParPaysEnHTMLAvecCtrl" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ParCodeEPCEnHTMLAvecCtrl">
+      <http:operation location="/ParCodeEPCEnHTMLAvecCtrl" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ParCodePostalEnHTMLAvecCtrl">
+      <http:operation location="/ParCodePostalEnHTMLAvecCtrl" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ParLocaliteEnHTMLAvecCtrl">
+      <http:operation location="/ParLocaliteEnHTMLAvecCtrl" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ParRegionEnHTMLAvecCtrl">
+      <http:operation location="/ParRegionEnHTMLAvecCtrl" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="DerniersDeces">
+    <wsdl:port name="DerniersDecesSoap" binding="tns:DerniersDecesSoap">
+      <soap:address location="http://webservices.enaos.net/derniersdeces.asmx" />
+    </wsdl:port>
+    <wsdl:port name="DerniersDecesSoap12" binding="tns:DerniersDecesSoap12">
+      <soap12:address location="http://webservices.enaos.net/derniersdeces.asmx" />
+    </wsdl:port>
+    <wsdl:port name="DerniersDecesHttpGet" binding="tns:DerniersDecesHttpGet">
+      <http:address location="http://webservices.enaos.net/derniersdeces.asmx" />
+    </wsdl:port>
+    <wsdl:port name="DerniersDecesHttpPost" binding="tns:DerniersDecesHttpPost">
+      <http:address location="http://webservices.enaos.net/derniersdeces.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
