@@ -2,7 +2,6 @@
 
 namespace AcMarche\Api\Controller;
 
-use AcMarche\Icar\Repository\IcarRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,7 +18,6 @@ class DefaultController extends AbstractController
         private readonly string $baseUrl,
         private readonly HttpClientInterface $httpClient,
         private readonly CacheInterface $cache,
-        private readonly IcarRepository $icarRepository,
     ) {}
 
     #[Route(path: '/', name: 'api_home')]
@@ -36,29 +34,11 @@ class DefaultController extends AbstractController
     #[Route(path: '/rues', name: 'rues')]
     public function rues(): JsonResponse
     {
-        try {
-            $rues = $this->icarRepository->findRuesByLocalite(null);
-        } catch (\Exception $e) {
-            return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-
-        $data = [];
-        $i = 0;
-
-        foreach ($rues->rues as $rue) {
-            $data[$i]['id'] = $i;
-            $data[$i]['nom'] = $rue->nom;
-            $data[$i]['code_postal'] = $rue->cps[0];
-            $data[$i]['code'] = '';
-            $data[$i]['xMin'] = $rue->xMin;
-            $data[$i]['xMax'] = $rue->xMax;
-            $data[$i]['yMin'] = $rue->yMin;
-            $data[$i]['yMax'] = $rue->yMax;
-            $data[$i]['localites'] = $rue->localites;
-            $i++;
-        }
-
-        return new JsonResponse($data);
+        //bundle AcMarche\Icar pas encore porte
+        return new JsonResponse(
+            ['error' => 'Bundle AcMarche\\Icar pas encore porte'],
+            Response::HTTP_NOT_IMPLEMENTED,
+        );
     }
 
     #[Route(path: '/fiches/category/{id}', methods: ['GET'], format: 'json')]
