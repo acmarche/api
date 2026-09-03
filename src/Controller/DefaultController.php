@@ -62,8 +62,9 @@ class DefaultController extends AbstractController
     }
 
     #[Route(path: '/fiches/category/{id}', methods: ['GET'], format: 'json')]
-    public function cats(int $id): JsonResponse
+    public function cats(int|string $id): JsonResponse
     {
+        $id = (int) $id;
         return $this->cache->get(
             'cat-'.$id.time(),
             function (ItemInterface $item) use ($id) {
